@@ -1,0 +1,154 @@
+\section{積分、廣義積分，與歐拉的恆等式}\label{sec:calc}
+
+希爾伯特的證明（論文第一節）和 Klazar 的證明（第三節）都圍繞著積分
+$\int_0^{+\infty}p(x)\e^{-x}\dd x$。這一節把需要的積分知識補齊。
+學過數學甲的同學知道「多項式的積分」，但「積分到無窮遠」與「分部積分」不在課綱內。
+
+\subsection{積分、微積分基本定理、分部積分}
+
+\begin{prereq}{定積分與微積分基本定理}
+對於區間 $[a,b]$ 上的連續函數 $f$，$\int_a^b f(x)\dd x$ 是曲線 $y=f(x)$ 與 $x$ 軸之間
+在 $a\le x\le b$ 的「有號面積」（$x$ 軸上方算正、下方算負）。
+\textbf{微積分基本定理}說：如果 $F'(x)=f(x)$（$F$ 叫做 $f$ 的\emph{原函數}或\emph{反導函數}），那麼
+\[
+  \int_a^b f(x)\dd x=F(b)-F(a)\,.
+\]
+例如 $\int_0^2 x^2\dd x=\frac{2^3}{3}-0=\frac83$，因為 $\big(\frac{x^3}{3}\big)'=x^2$。
+積分有\textbf{線性}：$\int(\alpha f+\beta g)=\alpha\int f+\beta\int g$；
+也有\textbf{可加性}：$\int_a^c=\int_a^b+\int_b^c$（把面積切成兩塊）。
+\end{prereq}
+
+\begin{prereq}{分部積分（integration by parts）}
+乘積的微分法則 $(uv)'=u'v+uv'$ 兩邊積分，得
+\[
+  \int_a^b u(x)v'(x)\dd x=\Big[u(x)v(x)\Big]_a^b-\int_a^b u'(x)v(x)\dd x\,,
+  \qquad\text{其中 }\Big[uv\Big]_a^b:=u(b)v(b)-u(a)v(a)\,.
+\]
+它的用途是「把微分從一個因子搬到另一個因子上」。下面算 $\int x^n\e^{-x}$ 時，
+就是把 $x^n$ 的次數一次降一。
+\end{prereq}
+
+\subsection{積分到無窮遠：廣義積分}
+
+\begin{prereq}{廣義積分（improper integral）}
+\[
+  \int_0^{+\infty}f(x)\dd x:=\lim_{b\to+\infty}\int_0^{b}f(x)\dd x\,,
+\]
+只要這個極限存在（是一個有限的實數）。直覺上，它是一塊「向右無限延伸、但總面積有限」的區域。
+同樣有線性與可加性：$\int_0^{+\infty}=\int_0^{j}+\int_j^{+\infty}$。
+\end{prereq}
+
+為什麼 $\int_0^{+\infty}x^n\e^{-x}\dd x$ 會是有限的？因為 $\e^{-x}$ 衰減得比任何多項式成長得快：
+由級數 $\e^{x}\ge\dfrac{x^{n+2}}{(n+2)!}$（取級數中的一項，$x>0$），得
+\[
+  0<x^{n}\e^{-x}\le\frac{(n+2)!}{x^{2}}\qquad(x>0)\,,
+\]
+而 $\int_1^{b}\frac{1}{x^2}\dd x=1-\frac1b<1$ 有界，所以總面積有限。
+順帶得到 $\lim_{x\to+\infty}x^n\e^{-x}=0$，等一下會用到。
+
+\subsection{歐拉的恆等式：$\int_0^{+\infty}x^n\e^{-x}\dd x=n!$}
+
+\begin{thm}[歐拉的恆等式]\label{thm:euler}
+對所有 $n\in\N_0$，
+\[
+  I_n:=\int_0^{+\infty}x^n\e^{-x}\dd x=n!\,.
+\]
+\end{thm}
+\begin{pf}
+對 $n$ 做\textbf{數學歸納法}。$n=0$：$(-\e^{-x})'=\e^{-x}$，所以
+$I_0=\lim_{b\to\infty}\big[-\e^{-x}\big]_0^{b}=\lim_{b\to\infty}(1-\e^{-b})=1=0!$。
+設 $n\ge1$。分部積分，取 $u=x^n$、$v=-\e^{-x}$（則 $v'=\e^{-x}$）：
+\[
+  \int_0^{b}x^n\e^{-x}\dd x=\Big[-x^n\e^{-x}\Big]_0^{b}+n\int_0^{b}x^{n-1}\e^{-x}\dd x
+  =-b^n\e^{-b}+n\int_0^{b}x^{n-1}\e^{-x}\dd x\,.
+\]
+令 $b\to\infty$，第一項趨近 $0$，得 $I_n=n\,I_{n-1}=n\cdot(n-1)!=n!$。
+\end{pf}
+
+由線性，馬上得到論文裡的「推廣形式」：對任何整數係數多項式 $\sum_{j=0}^m b_jx^j$，
+\begin{equation}\label{eq:euler-poly}
+  \int_0^{+\infty}\Big(\sum_{j=0}^m b_jx^j\Big)\e^{-x}\dd x=\sum_{j=0}^m b_j\cdot j!\,.
+\end{equation}
+這個式子是希爾伯特證明的引擎：\emph{積分把 $x^j$ 變成 $j!$}。
+如果多項式從 $x^{r}$ 項才開始（前面係數全為 $0$），右邊每一項都是 $r!$ 的倍數。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=12.5cm, height=7cm, xmin=0, xmax=12.5, ymin=0, ymax=1.5,
+  xlabel={$x$}, ylabel={$y$}, legend pos=north east, legend style={font=\footnotesize},
+  samples=200, domain=0:12.5, no markers, every axis plot/.append style={thick}]
+  \addplot[name path=f2, green!60!black] {x^2*exp(-x)};
+  \path[name path=axis] (axis cs:0,0) -- (axis cs:12.5,0);
+  \addplot[green!60!black, opacity=0.18] fill between[of=f2 and axis, soft clip={domain=0:12.5}];
+  \addplot[blue!70!black] {exp(-x)};
+  \addplot[orange!80!black] {x*exp(-x)};
+  \addplot[red!70!black] {x^3*exp(-x)};
+  \legend{$x^2\e^{-x}$（面積 $2!=2$）, , $\e^{-x}$（面積 $0!=1$）, $x\e^{-x}$（面積 $1!=1$）, $x^3\e^{-x}$（面積 $3!=6$）}
+\end{axis}
+\end{tikzpicture}
+\caption{歐拉的恆等式：曲線 $x^n\e^{-x}$ 下方從 $0$ 到 $+\infty$ 的面積恰好是 $n!$。
+$n$ 越大，山峰越往右、越高，但尾巴終究被 $\e^{-x}$ 壓下去。}
+\label{fig:euler}
+\end{figure}
+
+\subsection{平移換元：$\int_j^{+\infty}f(x)\dd x=\int_0^{+\infty}f(y+j)\dd y$}
+
+希爾伯特證明的第三個等式用了「變數變換 $y=x-j$」。它的幾何意義很直觀：
+把函數圖形整個往左平移 $j$ 單位，面積不變。
+
+\begin{prereq}{平移換元}
+對任何連續函數 $f$ 與實數 $j$，
+\[
+  \int_j^{b}f(x)\dd x=\int_0^{b-j}f(y+j)\dd y\,,\qquad
+  \int_j^{+\infty}f(x)\dd x=\int_0^{+\infty}f(y+j)\dd y\,.
+\]
+理由：若 $F'=f$，則 $G(y):=F(y+j)$ 滿足 $G'(y)=f(y+j)$（連鎖律），所以兩邊都等於 $F(b)-F(j)$。
+\end{prereq}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=6.6cm, height=5.2cm, xmin=0, xmax=10, ymin=0, ymax=0.7,
+  xlabel={$x$}, title={$\int_2^{+\infty}x^2\e^{-x}\dd x$}, title style={font=\small},
+  samples=150, domain=0:10, no markers, every axis plot/.append style={thick}]
+  \addplot[name path=f, blue!70!black] {x^2*exp(-x)};
+  \path[name path=ax] (axis cs:0,0) -- (axis cs:10,0);
+  \addplot[blue!70!black, opacity=0.2] fill between[of=f and ax, soft clip={domain=2:10}];
+  \draw[dashed] (axis cs:2,0) -- (axis cs:2,0.6);
+  \node[font=\footnotesize] at (axis cs:2,0.65) {$x=j=2$};
+\end{axis}
+\end{tikzpicture}
+\hfill
+\begin{tikzpicture}
+\begin{axis}[width=6.6cm, height=5.2cm, xmin=0, xmax=10, ymin=0, ymax=0.7,
+  xlabel={$y$}, title={$\int_0^{+\infty}(y+2)^2\e^{-(y+2)}\dd y$}, title style={font=\small},
+  samples=150, domain=0:10, no markers, every axis plot/.append style={thick}]
+  \addplot[name path=g, orange!80!black] {(x+2)^2*exp(-(x+2))};
+  \path[name path=ax] (axis cs:0,0) -- (axis cs:10,0);
+  \addplot[orange!80!black, opacity=0.2] fill between[of=g and ax, soft clip={domain=0:10}];
+  \draw[arr, gray] (axis cs:5,0.5) -- (axis cs:3,0.5);
+  \node[font=\footnotesize, anchor=west] at (axis cs:5.1,0.5) {圖形左移 $2$};
+\end{axis}
+\end{tikzpicture}
+\caption{平移換元。左右兩塊著色區域是同一塊面積，只是右圖把起點移到了 $0$。
+在希爾伯特證明裡，$f(y+j)=p_r(y+j)\e^{-(y+j)}=\e^{-j}\,p_r(y+j)\e^{-y}$，
+平移之後就能套用歐拉的恆等式。}
+\label{fig:shift}
+\end{figure}
+
+\subsection{一個粗估：有限區間上的積分不會太大}
+
+論文估計 $|A_r|\le c^{r}$ 時用的是最笨、也最可靠的估計：
+\begin{prereq}{積分的絕對值估計}
+若在 $[a,b]$ 上 $|f(x)|\le M$，則 $\Big|\int_a^b f(x)\dd x\Big|\le M\,(b-a)$。
+（面積不會超過「最高高度 $\times$ 寬度」的長方形。）
+\end{prereq}
+在 $[0,n]$ 上，$\e^{-x}\le1$，而
+\[
+  |p_r(x)|=|x|^r\,|(x-1)\cdots(x-n)|^{r+1}\le n^{r}\,(n^{n})^{r+1}\,,
+  \qquad\text{所以}\qquad
+  \Big|\int_0^{j}p_r(x)\e^{-x}\dd x\Big|\le n\cdot n^{r}\,n^{n(r+1)}\,,
+\]
+是某個只和 $n$ 有關的常數的 $r$ 次方。這就是 $|A_r|\le c^r$ 的全部內容。
+

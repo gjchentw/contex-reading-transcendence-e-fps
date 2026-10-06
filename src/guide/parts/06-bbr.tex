@@ -1,0 +1,199 @@
+\section{第二個證明：有理冪級數與極點的階}\label{sec:bbr}
+
+論文第二節把 Beukers、Bézivin 與 Robba（以下簡稱 BBR）1990 年的證明特殊化到 $\e$。
+它的思路和希爾伯特完全不同，\emph{不用積分}，只用第 \ref{sec:fps} 節的形式冪級數。
+
+\subsection{Lindemann--Weierstrass 定理與特殊化}
+
+BBR 證的是 \textbf{Lindemann--Weierstrass 定理}（以下簡稱 LW 定理）：若 $\alpha_1,\ldots,\alpha_t$ 是互不相同的代數數，
+$b_1,\ldots,b_t$ 是非零代數數，則
+\[
+  b_1\e^{\alpha_1}+b_2\e^{\alpha_2}+\cdots+b_t\e^{\alpha_t}\neq0\,.
+\]
+取 $\alpha_j=j$、$b_j=a_j$ 就得到 $\e$ 的超越性；取 $t=1$、$\alpha_1=\pi i$ 配合 $\e^{\pi i}=-1$
+可得 $\pi$ 的超越性。論文只處理 $b_j,\alpha_j\in\Z$ 的情形，這時所有係數都是整數，
+不必處理分母，證明乾淨許多（論文第二節末特別指出這點）。
+
+\begin{keyidea}[BBR 證明的藍圖]
+假設 $\sum_{j=1}^{t}b_j\e^{\alpha_j}=0$（$b_j\neq0$，$\alpha_j\in\N$ 互不相同）。
+\begin{enumerate}
+  \item 造兩個整數數列 $u_n=\sum_j b_j\alpha_j^{n}$ 與 $v_n=n!\sum_{r=0}^{n}u_r/r!$，
+        以及 FPS $V(x)=\sum v_nx^n$。
+  \item \textbf{假設只用在一個地方}：它讓 $v_n$ 很小，$v_n=O(A^n)$（$A=\max\alpha_j$）。
+  \item \textbf{定理 2.2}：整數數列 $v_n$ 有這種結構又只有指數成長，就逼得 $V(x)$ 是\emph{有理的}。
+        （證明的核心仍是核心招數：$v_n(k)$ 是 $k!$ 的倍數又比 $k!$ 小，所以是 $0$。）
+  \item \textbf{矛盾}：$V$ 滿足微分方程 $(1-x)V-x^{2}V'=\sum_j\dfrac{b_j}{1-\alpha_jx}$，
+        右邊有 $t$ 個一階極點，但命題 2.1 說左邊若有極點，階數都至少 $2$。
+\end{enumerate}
+\end{keyidea}
+
+\subsection{數列 $u_n$、$v_n$ 與它們的生成函數}
+
+\paragraph{$u_n$ 是「指數和」。}
+$u_n=b_1\alpha_1^{n}+\cdots+b_t\alpha_t^{n}$。它的生成函數是
+\[
+  \sum_{n\ge0}u_nx^n=\sum_{j=1}^{t}b_j\sum_{n\ge0}(\alpha_jx)^n=\sum_{j=1}^{t}\frac{b_j}{1-\alpha_jx}\,,
+\]
+一個有 $t$ 個\emph{一階}極點 $1/\alpha_1,\ldots,1/\alpha_t$ 的有理 FPS。
+令 $q(x)=\prod_j(1-\alpha_jx)=1-a_1x-\cdots-a_tx^t$（$a_i\in\Z$）；由第 \ref{sec:rational} 節，
+$u_n$ 滿足線性遞迴 $u_n=a_1u_{n-1}+\cdots+a_tu_{n-t}$。
+
+\begin{exmp}
+若（假想地）$b_1\e+b_2\e^2=0$，則 $t=2$、$\alpha=(1,2)$，$u_n=b_1+b_2\cdot2^n$，
+$q(x)=(1-x)(1-2x)=1-3x+2x^2$，遞迴是 $u_n=3u_{n-1}-2u_{n-2}$。
+（驗證：$3(b_1+2^{n-1}b_2)-2(b_1+2^{n-2}b_2)=b_1+(3\cdot2^{n-1}-2^{n-1})b_2=b_1+2^nb_2$。）
+\end{exmp}
+
+\paragraph{$v_n$ 是「$u_n/n!$ 的部分和，再乘回 $n!$」。}
+\[
+  \frac{v_n}{n!}=\sum_{r=0}^{n}\frac{u_r}{r!}\quad\Longrightarrow\quad
+  \frac{v_n}{n!}-\frac{v_{n-1}}{(n-1)!}=\frac{u_n}{n!}\quad\Longrightarrow\quad
+  \boxed{\,v_n-n\,v_{n-1}=u_n\,}\quad(n\ge1),\ v_0=u_0\,.
+\]
+$v_n$ 是整數（$n!/r!$ 是整數）。把這個遞迴寫成 FPS 的語言：
+$\sum nv_{n-1}x^n=x\cdot\sum nv_{n-1}x^{n-1}=x\cdot(xV)'=xV+x^{2}V'$，所以
+\begin{equation}\label{eq:ode}
+  (1-x)V(x)-x^{2}V'(x)=\sum_{n\ge0}(v_n-nv_{n-1})x^n=\sum_{n\ge0}u_nx^n=\sum_{j=1}^{t}\frac{b_j}{1-\alpha_jx}\,.
+\end{equation}
+這就是「微分方程」。注意到現在為止\emph{完全沒用到假設}。
+
+\subsection{假設在哪裡用？$v_n$ 很小}
+
+$\sum_{n\ge0}\dfrac{u_n}{n!}x^n=\sum_j b_j\sum_n\dfrac{(\alpha_jx)^n}{n!}=\sum_jb_j\e^{\alpha_jx}$，
+代 $x=1$：$\sum_{n\ge0}\dfrac{u_n}{n!}=\sum_jb_j\e^{\alpha_j}=0$。
+所以「前 $n$ 項的和」等於「尾巴的負號」：
+\[
+  \frac{v_n}{n!}=\sum_{r=0}^{n}\frac{u_r}{r!}=-\sum_{r=n+1}^{\infty}\frac{u_r}{r!}\,.
+\]
+尾巴很小。$|u_r|\le(\sum|b_j|)A^{r}=:cA^{r}$，而 $\dfrac{n!}{(n+j)!}=\dfrac{1}{(n+1)\cdots(n+j)}\le\dfrac{1}{j!}$，故
+\[
+  |v_n|=n!\Big|\sum_{j\ge1}\frac{u_{n+j}}{(n+j)!}\Big|\le cA^{n}\sum_{j\ge1}\frac{A^{j}\,n!}{(n+j)!}
+  \le cA^{n}\sum_{j\ge1}\frac{A^{j}}{j!}\le c\,\e^{A}A^{n}\,.
+\]
+這和 Fourier 證明裡的「尾巴 $T<1$」是同一招：\emph{整數數列 $v_n$ 的成長被壓到 $O(A^n)$}。
+
+\begin{paperbox}
+以上對應論文第二節「We prove, with the help of Proposition 2.1 and Theorem 2.2\ldots」那一段的前半，
+從假設到「Thus $v_n=O(A^n)$」。
+\end{paperbox}
+
+\subsection{定理 2.2：被壓住的 $v_n$ 逼出有理性}
+
+\begin{thm}[論文定理 2.2，白話版]
+設 $u_n$、$v_n$ 如上（$b_j\ne0$ 整數，$\alpha_j$ 互異正整數），且 $v_n=O(A^n)$。
+則存在 $k\in\N$，使 $q(x)^{k}V(x)$ 是多項式；特別地 $V$ 是有理的。
+\end{thm}
+
+證明分四步。記 $v_n(k):=\coef{n}\big(q(x)^kV(x)\big)$，所以 $v_n(0)=v_n$，而「$q^kV$ 是多項式」
+就是「$v_n(k)=0$ 對所有夠大的 $n$」。從 $q^{k+1}V=q\cdot q^{k}V$ 立刻得到遞迴
+\begin{equation}\label{eq:rec}
+  v_n(k+1)=v_n(k)-a_1v_{n-1}(k)-\cdots-a_tv_{n-t}(k)\qquad(n\ge t)\,.
+\end{equation}
+
+\paragraph{步驟 1：$|v_n(k)|\le c\,A^{n}C^{k}$，其中 $C=1+|a_1|+\cdots+|a_t|$（對 $n\ge tk$）。}
+對 $k$ 歸納。$k=0$ 就是假設。由 \eqref{eq:rec}，
+$|v_n(k+1)|\le cA^nC^k\big(1+|a_1|A^{-1}+\cdots+|a_t|A^{-t}\big)\le cA^nC^{k+1}$，
+因為 $A\ge1$。（$n\ge t(k+1)$ 保證所有用到的 $v_{n-i}(k)$ 都滿足 $n-i\ge tk$。）
+直覺：每乘一次 $q$，係數最多放大 $C$ 倍。
+
+\paragraph{步驟 2：$k!$ 整除 $v_n(k)$（對 $n\ge tk$）。}
+這是最巧妙的一步。反覆使用 $v_n=u_n+n\,v_{n-1}$：
+\[
+  v_n=u_n+n\,u_{n-1}+n(n-1)\,u_{n-2}+\cdots+(n)_{k-1}u_{n-k+1}+\underbrace{(n)_k\,v_{n-k}}_{=:w_n}\,,
+\]
+（負指標的 $u$、$v$ 視為 $0$）。尾項 $w_n=(n)_kv_{n-k}=k!\binom nk v_{n-k}$ \textbf{永遠是 $k!$ 的倍數}
+（第 \ref{sec:countable} 節的下降階乘）。令 $W(x)=\sum w_nx^n$。剩下的 $V-W$ 是前 $k$ 項之和，
+而每一項的生成函數都是有理的、分母是 $q$ 的次方：
+\[
+  \sum_{n\ge0}(n)_r\,u_{n-r}\,x^n=\sum_{j=1}^{t}b_j\,r!\,x^{r}\sum_{m\ge0}\binom{m+r}{r}(\alpha_jx)^{m}
+  =\sum_{j=1}^{t}\frac{r!\,b_j\,x^{r}}{(1-\alpha_jx)^{r+1}}=\frac{p_r(x)}{q(x)^{r+1}}\,,
+\]
+其中 $p_r\in\Z[x]$ 的次數 $<t(r+1)$（通分時乘上其他因子的 $(r+1)$ 次方）。
+把 $r=0,\ldots,k-1$ 加起來、通分到 $q^{k}$：$V-W=\dfrac{p(x)}{q(x)^k}$，$\deg p<tk$。
+於是 $q^kV=p+q^kW$，而當 $n\ge tk$ 時 $\coef{n}p=0$，所以
+\[
+  v_n(k)=\coef{n}\big(q^kW\big)=w_n-a_1w_{n-1}-\cdots\quad\text{（$w$ 的整數組合）}\ \Rightarrow\ k!\mid v_n(k)\,.
+\]
+
+\paragraph{步驟 3：核心招數，窗口裡的 $v_n(k)$ 全是 $0$。}
+若 $n\ge tk$ 且 $v_n(k)\neq0$，由步驟 1、2：$k!\le|v_n(k)|\le cA^nC^k$。
+反過來，\emph{只要 $k!>cA^{n}C^{k}$，就有 $v_n(k)=0$}。
+取 $k_0$ 使 $k\ge k_0$ 時 $k!>cA^{2tk}C^{k}$（第 \ref{sec:factorial} 節：階乘打敗指數 $(A^{2t}C)^k$）。
+那麼對所有 $k\ge k_0$ 與 $tk\le n\le 2tk$（圖 \ref{fig:lattice} 的區域 $N$），
+$cA^nC^k\le cA^{2tk}C^k<k!$，故 $v_n(k)=0$。
+
+\paragraph{步驟 4：骨牌效應，把零推到所有 $n\ge 2tk$。}
+把 \eqref{eq:rec} 改寫成
+\[
+  v_n(k)=v_n(k+1)+a_1v_{n-1}(k)+\cdots+a_tv_{n-t}(k)\,.
+\]
+右邊每一項的「位置」都比左邊更靠近區域 $N$（圖 \ref{fig:lattice}）：$(k+1,n)$ 往右走一格，
+$(k,n-i)$ 往下走 $i$ 格。定義「範數」$\|(k,n)\|=n-2tk$，它在區域 $M=\{n\ge2tk,\ k\ge k_0\}$ 上
+最小值是 $0$，而右邊每個位置的範數都嚴格變小，且仍落在 $M\cup N$ 裡。
+對範數做歸納：範數 $0$ 的點 $(k,2tk)$ 在 $N$ 裡，已經是 $0$；
+範數更大的點，右邊全是範數更小、已知為 $0$ 的值，所以左邊也是 $0$。
+於是對 $k=k_0$ 與所有 $n\ge tk_0$，$v_n(k_0)=0$：$q^{k_0}V$ 是多項式。$\qed$
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small, x=0.9cm, y=0.26cm]
+  \clip (-1.2,-3.5) rectangle (11.4,43);
+  \fill[orange!18] (3,6) -- (10,20) -- (10,40) -- (3,12) -- cycle;
+  \fill[blue!12]   (3,12) -- (10,40) -- (3,40) -- cycle;
+  \draw[gray!35, xstep=1, ystep=4] (0,0) grid (10,40);
+  \draw[arr] (0,0) -- (10.6,0) node[right] {$k$};
+  \draw[arr] (0,0) -- (0,41.5) node[above] {$n$};
+  \draw[thick, orange!80!black] (0,0) -- (10,20) node[pos=0.9, below right, font=\footnotesize] {$n=tk$};
+  \draw[thick, blue!60!black] (0,0) -- (10,40) node[pos=0.93, above left, font=\footnotesize] {$n=2tk$};
+  \draw[dashed, red!70!black] (3,0) -- (3,40);
+  \node[below, red!70!black, font=\footnotesize] at (3,0) {$k_0$};
+  \node[orange!80!black, font=\bfseries] at (7.8,19) {區域 $N$};
+  \node[orange!80!black, font=\footnotesize, align=center] at (7.8,15) {$tk\le n\le 2tk$\\ 直接為 $0$（步驟 3）};
+  \node[blue!60!black, font=\bfseries, anchor=west] at (3.3,36) {區域 $M$};
+  \node[blue!60!black, font=\footnotesize, align=center, anchor=west] at (3.3,32) {$n\ge 2tk$\\ 歸納推出 $0$};
+  \fill[red!70!black] (5,28) circle (3pt) node[above left, font=\footnotesize] {$\gamma=(k,n)$};
+  \fill[black] (6,28) circle (2.2pt) node[right, font=\footnotesize] {$\beta_0=(k{+}1,n)$};
+  \fill[black] (5,27) circle (2.2pt);
+  \fill[black] (5,26) circle (2.2pt) node[right, font=\footnotesize] {$\beta_1,\ldots,\beta_t$};
+  \draw[arr, red!70!black] (5,28) -- (5.8,28);
+  \draw[arr, red!70!black] (5,28) -- (5,27.3);
+  \draw[arr, red!70!black] (5,28) to[bend right=30] (5,26.3);
+\end{tikzpicture}
+
+\caption{定理 2.2 證明的「骨牌圖」（畫的是 $t=2$）。橫軸是 $q$ 的次方 $k$，縱軸是係數指標 $n$。
+橘色帶 $N$ 裡的 $v_n(k)$ 因為「是 $k!$ 的倍數又小於 $k!$」直接是 $0$；
+藍色區 $M$ 裡的每個點，由遞迴可以用右邊與下方（更接近 $N$）的點表示，所以零一路向上蔓延。
+白色區域（$n<tk$）是我們不管的地方：$q^kV$ 可以在那裡有非零係數，那只是多項式部分。}
+\label{fig:lattice}
+\end{figure}
+
+\subsection{收尾：極點的階數說不可能}
+
+由定理 2.2，$V$ 是有理的。看微分方程 \eqref{eq:ode}：左邊是 $p(x)V+c\,x^mV'$ 的形式
+（$p=1-x$，$c=-1$，$m=2$），命題 2.1（第 \ref{sec:rational} 節的「關鍵想法」）說它
+\emph{要嘛是多項式，要嘛所有極點的階數都至少 $2$}。
+但右邊 $\sum_j b_j/(1-\alpha_jx)$ 有 $t\ge1$ 個\emph{一階}極點（$b_j\neq0$ 保證不會消掉）。矛盾。$\qed$
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small, node distance=0.5cm and 1.2cm]
+  \node[box, fill=gray!8, text width=3.6cm] (v) {有理 FPS $V$\\ 極點 $1/\alpha$，階 $m$};
+  \node[box, fill=blue!8, text width=3.6cm, right=of v] (d) {$x^{2}V'$\\ 階變成 $m+1\ \ge 2$};
+  \node[box, fill=blue!8, text width=3.6cm, below=of d] (p) {$(1-x)V$\\ 階 $\le m$};
+  \node[box, fill=orange!10, text width=4.2cm, right=of d, yshift=-0.9cm] (s) {$(1-x)V-x^{2}V'$\\ 極點階數 $=m+1\ge2$\\（或根本是多項式）};
+  \node[box, fill=red!8, text width=4.2cm, below=0.9cm of s] (r) {$\sum_j \dfrac{b_j}{1-\alpha_jx}$\\ $t$ 個一階極點};
+  \draw[arr] (v) -- (d); \draw[arr] (v) |- (p);
+  \draw[arr] (d) -- (s); \draw[arr] (p) -- (s);
+  \draw[thick, red!70!black] ([yshift=-2pt]s.south) -- ([yshift=2pt]r.north) node[midway, right, font=\footnotesize] {$=$？ 不可能};
+\end{tikzpicture}
+\caption{命題 2.1 的用法：微分把極點階數抬高到至少 $2$，乘多項式抬不回來，
+所以左邊不可能等於一個只有一階極點的右邊。}
+\label{fig:pole-orders}
+\end{figure}
+
+\begin{rem}
+為什麼這個證明「不實質使用不可數集合」？整個論證只碰了整數數列 $u_n,v_n,v_n(k)$、
+多項式、以及 FPS 的係數運算；唯一的極限是「$\sum u_r/r!$ 的尾巴很小」，
+而那只牽涉可數多個有理數。論文第二節末也說：在 BBR 原本處理一般代數數的版本裡，
+$u_n,v_n$ 只能保證是有理數，得額外處理分母；特殊化到整數後就乾淨了。
+\end{rem}

@@ -1,0 +1,76 @@
+\section*{導讀的使用方式}
+\addcontentsline{toc}{section}{導讀的使用方式}
+
+\subsection*{這篇論文在說什麼？}
+
+論文標題是 \emph{The transcendence of $\e$ via formal power series}，作者 Martin Klazar
+（布拉格查理大學），預印本編號 arXiv:2601.01019 [math.NT]（2026 年 1 月提交，同年 5 月修訂至第 8 版）。「$\e$ 的超越性」指的是：$\e=2.71828\ldots$ 這個數\emph{不是}任何一個
+整數係數多項式方程的根。換句話說，不論你取多少個整數 $a_0,a_1,\ldots,a_n$（不全為 $0$），
+\[
+  a_0+a_1\e+a_2\e^2+\cdots+a_n\e^n\neq 0\,.
+\]
+這個事實在 1873 年由 Hermite 證明，1893 年希爾伯特給了一個精簡的版本。論文做了三件事：
+\begin{enumerate}
+  \item \textbf{第一節}：複述希爾伯特的證明，然後提出問題：這個證明用到「函數」
+        $F(x)=p(x)\e^{-x}$，而一個定義在 $[0,+\infty)$ 上的實函數，看成「所有點對 $(x,F(x))$
+        的集合」，是\emph{不可數}的集合。能不能把證明改寫成只用\emph{可數}的物件？
+  \item \textbf{第二節}：介紹 Beukers、Bézivin 與 Robba 在 1990 年的證明，它只用
+        「形式冪級數」（一種「寫不完的多項式」），而形式冪級數就是一串係數，是可數的物件。
+        他們證明的是更一般的 Lindemann--Weierstrass 定理；論文把它\emph{特殊化}到 $\e$ 的情形，
+        讓邏輯結構看得更清楚。
+  \item \textbf{第三節}：作者自己的證明。把希爾伯特證明裡每一個「分析」步驟
+        （代入、平移、積分、取極限）都翻譯成對係數序列的操作，於是同一個證明就不再需要
+        不可數集合了。
+\end{enumerate}
+
+\subsection*{為什麼值得高中生讀？}
+
+因為它同時示範了三件在課本裡很少見到的事：
+\begin{itemize}
+  \item \textbf{反證法可以「量化」}：證明的核心招數是「造出一個非零整數，卻又證明它的絕對值小於 $1$」。
+        這個招數高中生完全可以掌握（我們會先用它證明 $\e$ 是無理數）。
+  \item \textbf{同一個定理可以有完全不同的證明思路}：希爾伯特靠的是積分；
+        Beukers 等人靠的是「有理函數的極點」；Klazar 則靠「把分析翻譯成代數」。
+  \item \textbf{數學家會在意「證明用了哪些工具」}：這篇論文真正關心的是基礎論的潔癖：
+        \emph{同樣的結論，能不能用更少、更「小」的集合得到？}
+\end{itemize}
+
+\subsection*{怎麼讀這份導讀}
+
+\begin{itemize}
+  \item 第一部分是先備知識。每個藍色方框「先備知識」都是高中課綱之外、但論文會用到的概念。
+        如果你已經學過微積分（例如數學甲的多項式微積分），第 \ref{sec:calc} 節可以快速掃過，
+        但請務必看「廣義積分」與「歐拉恆等式」兩段。
+  \item 橘色方框「關鍵想法」是每個證明的靈魂，先讀它，再看細節。
+  \item 灰色方框「論文原文對照」告訴你導讀的哪一段對應論文的哪一個命題，方便你對照原文。
+  \item 紅色方框「小心」提醒常見的誤解。
+  \item 本文用 $\N=\{1,2,3,\ldots\}$、$\N_0=\{0,1,2,\ldots\}$、$\Z$（整數）、$\Q$（有理數）、
+        $\R$（實數）、$\C$（複數），與論文一致。$n!=1\cdot2\cdots n$ 是階乘，$0!=1$。
+        $\binom{n}{k}$ 是高中的組合數 $C^n_k$。
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.8cm and 1.0cm, font=\small]
+  \node[box, fill=blue!6, text width=5.2cm] (s1) {\textbf{第一節}\\ 希爾伯特的分析證明\\
+    {\footnotesize 積分 $\int_0^{+\infty}p_r(x)\e^{-x}\dd x$，拆成「小量 $A_r$」與「$r!$ 的倍數 $B_r$」}};
+  \node[box, fill=blue!6, text width=5.2cm, right=of s1] (q) {\textbf{提問}\\ 證明用了不可數集合（函數 $F=p\e^{-x}$）\\ 能否只用可數物件？};
+  \node[box, fill=orange!8, text width=5.2cm, below=of s1] (s3)
+    {\textbf{第三節}\\ Klazar：希爾伯特證明的 FPS 版\\
+    {\footnotesize 定義「半形式」的平移、牛頓積分、廣義積分，逐條證明它們和分析裡的性質一樣}};
+  \node[box, fill=orange!8, text width=5.2cm, below=of q] (s2)
+    {\textbf{第二節}\\ Beukers--Bézivin--Robba\\
+    {\footnotesize 若 $\e$ 是代數數，則某個 FPS $V(x)$ 既是有理的，又滿足一個微分方程，而極點的階數會互相矛盾}};
+  \node[box, fill=green!8, text width=6cm, anchor=north] (end) at ($(s3.south)!0.5!(s2.south)+(0,-0.8cm)$)
+    {\textbf{結論}\\ 兩個不使用不可數集合的證明都得到：$\e$ 是超越數};
+  \draw[arr] (s1) -- (q);
+  \draw[arr] (q) -- (s2);
+  \draw[arr] (q) -- (s3);
+  \draw[arr, dashed, gray] (s1) -- node[lbl, left, text=gray!60!black]{翻譯} (s3);
+  \draw[arr] (s2) -- (end);
+  \draw[arr] (s3) -- (end);
+\end{tikzpicture}
+
+\caption{論文的地圖。第一節提出問題，第二、三節各給一個回答。}
+\label{fig:map}
+\end{figure}

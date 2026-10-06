@@ -1,0 +1,143 @@
+\section{三個證明的比較}\label{sec:compare}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{4.2cm}@{}}
+\toprule
+ & 希爾伯特（§1） & Beukers--Bézivin--Robba（§2） & Klazar（§3） \\
+\midrule
+核心物件 & 積分 $\int_0^{+\infty}p_r(x)\e^{-x}\dd x$ & 整數數列 $v_n$ 與 FPS $V(x)$ & 收斂 FPS 上的半形式積分 \\
+「非零整數」 & $B_r/r!$ & $v_n(k)/k!$ & $B_r/r!$（同希爾伯特） \\
+「小於 $1$」的來源 & $\lvert A_r\rvert\le c^r$，$c^r/r!\to0$ & $\lvert v_n(k)\rvert\le cA^nC^k$，$k!$ 更大 & 命題 3.15 的估計 \\
+假設用在哪 & $P\cdot I_r=0$ & 尾巴 $\sum_{r>n}u_r/r!$ 很小 & $P\cdot\int p_r\Exp(-x)=0$ \\
+最後的矛盾 & 整數 $B_r$ 太小 & 有理 FPS 的極點階數對不上 & 整數 $B_r$ 太小 \\
+用到不可數集合？ & 是（函數、最大值） & 否 & 否 \\
+推廣到 LW 定理？ & 可（Hermite--Lindemann 方法） & 原文就是 LW & 論文未討論 \\
+\bottomrule
+\end{tabular}
+\caption{三個證明一覽。}
+\end{table}
+
+讀完三個證明，可以帶走三件事：
+\begin{enumerate}
+  \item \textbf{超越性證明的共同結構}是「造一個整數，證明它非零又太小」。從 Fourier 證 $\e$ 無理，
+        到 Hermite、希爾伯特、BBR，骨架沒變，變的是「怎麼造出那個整數」。
+  \item \textbf{「形式冪級數」是把分析代數化的工具}。它讓「函數」變成「數列」，
+        「微分方程」變成「遞迴關係」，「極點」變成「係數的成長率」。
+        這套語言在組合數學（生成函數）、數論、電腦代數裡無處不在。
+  \item \textbf{數學家也會問「這個證明用了什麼」}。本論文的出發點不是新定理，而是對舊證明的
+        基礎論考察。這種「同一定理、不同資源」的比較，是數理邏輯與反推數學（reverse mathematics）
+        的核心精神。
+\end{enumerate}
+
+\section{給高中生的練習}
+
+每一題都只用本導讀介紹過的工具。題後括號是提示。
+
+\begin{exer}
+證明 $\sqrt[3]{2}+1$ 是代數數，並寫出它滿足的整數係數多項式。（令 $x-1=\sqrt[3]2$，立方。）
+\end{exer}
+
+\begin{exer}
+用第 \ref{sec:irrational} 節的方法證明 $\e^{-1}=\sum_{n\ge0}\frac{(-1)^n}{n!}$ 是無理數。
+（交錯級數的尾巴絕對值小於第一個被捨去的項。）
+\end{exer}
+
+\begin{exer}
+證明對任何 $c>0$，$\lim_{x\to+\infty}x^{5}\e^{-x}=0$。（用 $\e^{x}\ge x^6/6!$。）
+\end{exer}
+
+\begin{exer}
+直接用分部積分計算 $\int_0^{+\infty}x^{2}\e^{-x}\dd x$，確認答案是 $2!=2$。
+\end{exer}
+
+\begin{exer}
+在 $\Z[[x]]$ 裡驗證 $(1-x)^2\cdot\sum_{n\ge0}(n+1)x^n=1$，從而 $\frac{1}{(1-x)^2}=\sum(n+1)x^n$。
+再求 $\coef{n}\frac{1}{(1-x)^3}$。（圖 \ref{fig:cauchy} 的乘法規則。）
+\end{exer}
+
+\begin{exer}
+令 $F(x)=\sum F_nx^n$ 是費氏數列的生成函數。驗證 $(1-x-x^2)F(x)=x$，
+並把 $\frac{x}{1-x-x^2}$ 拆成部分分式 $\frac{A}{1-\varphi x}+\frac{B}{1-\psi x}$
+（$\varphi=\frac{1+\sqrt5}{2}$，$\psi=\frac{1-\sqrt5}{2}$），推出 $F_n=\frac{\varphi^n-\psi^n}{\sqrt5}$。
+這說明：極點 $1/\varphi$ 決定了 $F_n$ 的成長速度 $\varphi^n$。
+\end{exer}
+
+\begin{exer}
+設 $A(x)=\frac{1}{1-2x}$。計算 $A'(x)$ 與 $(1-x)A(x)-x^2A'(x)$，確認後者在 $x=\frac12$ 的極點是二階，
+印證命題 2.1。
+\end{exer}
+
+\begin{exer}
+在第 \ref{sec:bbr} 節的例子（$t=2$，$\alpha=(1,2)$，$b_1=1$，$b_2=-1$）裡，
+算出 $u_0,\ldots,u_4$ 與 $v_0,\ldots,v_4$，並驗證 $v_n-nv_{n-1}=u_n$。
+（這個例子的假設 $\e-\e^2=0$ 當然是假的，所以 $v_n$ 不會被壓到 $O(2^n)$；你可以觀察它成長得多快。）
+\end{exer}
+
+\begin{exer}
+取 $f(x)=x^2$，用定義 3.3 算 $f(x+b)$，確認它等於 $(x+b)^2$ 展開。
+再取 $f=\Exp$，驗證命題 3.6 在 $a=1$ 時的前三個係數：$\coef{n}\Exp(x+b)=\e^{b}/n!$（$n=0,1,2$）。
+\end{exer}
+
+\begin{exer}[挑戰]
+證明定義 3.11 中的極限 $L$ 與數列 $(b_n)$ 的選取無關。
+（若兩個數列給出不同的 $L$，把它們交錯排成一個新數列，它仍趨近 $+\infty$，但對應的積分序列不收斂。）
+\end{exer}
+
+\section{延伸閱讀}
+
+\begin{itemize}
+  \item \textbf{論文本身}：M.~Klazar, \emph{The transcendence of $\e$ via formal power series}, arXiv:2601.01019 [math.NT], 2026（v8, 2026-05-13）。
+        \url{https://arxiv.org/abs/2601.01019}，DOI: \url{https://doi.org/10.48550/arXiv.2601.01019}。
+        讀完本導讀後，建議按「第一節 $\to$ 第三節 $\to$ 第二節」的順序讀原文：第三節和第一節最像，第二節最獨立。
+  \item \textbf{希爾伯特的原文}：D.~Hilbert, \emph{Ueber die Transcendenz der Zahlen $\e$ und $\pi$},
+        Math.\ Ann.\ 43 (1893), 216--219。只有四頁，德文。
+  \item \textbf{英文入門}：K.~Conrad, \emph{Transcendence of $e$}，6 頁講義，
+        \url{https://kconrad.math.uconn.edu/blurbs/analysis/transcendence-e.pdf}。
+        用有限區間積分，是高中生讀原始證明最友善的版本。
+  \item \textbf{教科書}：A.~Baker, \emph{Transcendental Number Theory}。劍橋大學出版社，1975 年。
+        第一章就是 $\e$ 與 $\pi$ 的超越性和 Lindemann--Weierstrass 定理（定理 1.2 與 1.4）。
+  \item \textbf{BBR 原文}：F.~Beukers, J.-P.~Bézivin, P.~Robba,
+        \emph{An alternative proof of the Lindemann--Weierstrass theorem}, Amer.\ Math.\ Monthly 97 (1990), 193--197。
+        Monthly 的文章以可讀性著稱，有本導讀第 \ref{sec:bbr} 節當基礎應該讀得懂。
+  \item \textbf{可數實分析}：M.~Klazar, \emph{Countable real analysis}, arXiv:2301.08142。論文第一節末提到的「第三條路」。
+  \item \textbf{希爾伯特綱領與無窮}：R.~Zach, \emph{Hilbert's program and infinity}, arXiv:2602.12131。
+        解釋希爾伯特為什麼在意「消去無窮」。
+  \item \textbf{Weyl 的《連續統》}：H.~Weyl, \emph{Das Kontinuum}, 1918。實分析可以在可數框架裡進行的最早系統性嘗試。
+\end{itemize}
+
+\section*{名詞對照表}
+\addcontentsline{toc}{section}{名詞對照表}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+中文 & 英文 & 首次出現 \\
+\midrule
+代數數／超越數 & algebraic / transcendental number & §\ref{sec:numbers} \\
+反證法 & proof by contradiction & §\ref{sec:numbers} \\
+階乘 & factorial & §\ref{sec:factorial} \\
+廣義積分 & improper integral & §\ref{sec:calc} \\
+分部積分 & integration by parts & §\ref{sec:calc} \\
+原函數 & primitive, antiderivative & §\ref{sec:calc} \\
+形式冪級數（FPS） & formal power series & §\ref{sec:fps} \\
+係數提取 $\coef{n}$ & coefficient extraction & §\ref{sec:fps} \\
+收斂的 FPS，$\R\{x\}$ & convergent FPS & §\ref{sec:fps} \\
+有理 FPS & rational FPS & §\ref{sec:rational} \\
+部分分式 & partial fractions & §\ref{sec:rational} \\
+極點／階 & pole / order & §\ref{sec:rational} \\
+生成函數 & generating function & §\ref{sec:rational} \\
+線性遞迴 & linear recurrence & §\ref{sec:rational} \\
+可數／不可數 & countable / uncountable & §\ref{sec:countable} \\
+遺傳可數 & hereditarily countable & §\ref{sec:countable} \\
+戴德金分割 & Dedekind cut & §\ref{sec:countable} \\
+下降階乘 $(n)_k$ & falling factorial & §\ref{sec:countable} \\
+半形式運算 & semiformal operation & §\ref{sec:klazar} \\
+平移 & shift & §\ref{sec:klazar} \\
+牛頓積分 & Newton's integral & §\ref{sec:klazar} \\
+Lindemann--Weierstrass 定理 & LW theorem & §\ref{sec:bbr} \\
+\bottomrule
+\end{tabular}
+\end{center}

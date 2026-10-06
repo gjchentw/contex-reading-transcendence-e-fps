@@ -1,0 +1,185 @@
+\section{第三個證明：把分析翻譯成係數運算}\label{sec:klazar}
+
+論文第三節是作者自己的貢獻：\emph{一字不改希爾伯特的證明思路}，
+但把每一個分析工具（代值、平移、積分、取極限）換成對係數序列的操作，
+證明這些操作擁有和分析裡一模一樣的性質，於是整個證明就只用可數的物件。
+作者說「技術細節沒有想像中直接」，這一節會讓你看到難在哪裡。
+
+\begin{keyidea}[翻譯字典]
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+分析（函數 $F$） & FPS（係數 $(a_n)$） & 論文位置 \\
+\midrule
+$F(ax)$ & $f(ax):=\sum a^{n}a_nx^n$ & 第三節開頭 \\
+$F'$、$\int F$ & 逐項微分、逐項積分 & 命題 3.1 \\
+$\e^{x}$ & $\Exp=\sum x^n/n!$ & 定義 3.2 \\
+$F(x+b)$（平移） & $f(x+b):=\sum_n\big(\sum_{m\ge n}\binom mn a_mb^{m-n}\big)x^n$ & 定義 3.3 \\
+$\e^{ax+b}=\e^{b}\e^{ax}$ & $\Exp\big((ax)+\tfrac ba\big)=\e^{b}\Exp(ax)$ & 命題 3.6 \\
+$\int_u^vF$ & $\big(\int f\big)(v)-\big(\int f\big)(u)$（牛頓積分） & 定義 3.7 \\
+$\int_u^{+\infty}F$ & $\lim_n\int_u^{b_n}f$，$b_n\to+\infty$ & 定義 3.11 \\
+$\int_0^{+\infty}x^k\e^{-x}=k!$ & $\int_0^{+\infty}x^k\Exp(-x)=k!$ & 命題 3.16 \\
+\bottomrule
+\end{tabular}
+\end{center}
+右欄每一列都「只用係數」定義；需要極限的地方（平移、代值）論文稱為\textbf{半形式}（semiformal）運算，
+因為它們的係數由無窮和（極限）得到，而純形式運算（加、乘、微分）的係數只用有限和。
+\end{keyidea}
+
+\subsection{舞台：收斂的 FPS $\R\{x\}$}
+
+第三節在 $\R\{x\}$（收斂半徑無窮大的實係數 FPS，見第 \ref{sec:fps} 節）裡工作，
+因為「代值 $f(b)$」要有意義。基本運算 $f(ax)$、$f'$、$\int f$ 都不會離開 $\R\{x\}$（命題 3.1 第 3 點），
+而且滿足你預期的規則：$(fg)'=f'g+fg'$、$f(ax)'=af'(ax)$、$\int f(ax)=\frac1a(\int f)(ax)$、
+$(\int f)'=f$、$\int f'=f-\coef0f$。
+
+\subsection{平移：$f(x+b)$ 為什麼是那個公式}
+
+對多項式，$f(x+b)$ 就是代進去展開。例如 $f(x)=x^3$：
+$(x+b)^3=b^3+3b^2x+3bx^2+x^3$，係數是 $\binom3n b^{3-n}$。
+一般地，若 $f=\sum_m a_mx^m$，用二項式定理把每一項 $a_m(x+b)^m=\sum_{n\le m}a_m\binom mn b^{m-n}x^n$ 展開，
+再\emph{按 $x^n$ 收集}：
+\[
+  \coef{n}f(x+b)=\sum_{m\ge n}\binom{m}{n}a_m\,b^{m-n}\,.
+\]
+這就是定義 3.3。當 $f$ 不是多項式時，右邊是無窮和，所以需要 $f\in\R\{x\}$ 來保證它收斂
+（它其實是 $\frac{1}{n!}f^{(n)}(b)$，$f$ 在 $b$ 的 $n$ 階導數除以 $n!$，也就是泰勒展開）。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small]
+  \matrix (m) [matrix of math nodes, nodes={minimum width=2.2cm, minimum height=0.75cm, anchor=center},
+               column sep=2pt, row sep=2pt] {
+    m\backslash n & 0 & 1 & 2 & 3 \\
+    a_0(x+b)^0 & a_0 & & & \\
+    a_1(x+b)^1 & a_1b & a_1 & & \\
+    a_2(x+b)^2 & a_2b^2 & 2a_2b & a_2 & \\
+    a_3(x+b)^3 & a_3b^3 & 3a_3b^2 & 3a_3b & a_3 \\
+    \vdots & \vdots & \vdots & \vdots & \vdots \\
+  };
+  \begin{scope}[on background layer]
+    \fill[blue!12] (m-2-2.north west) rectangle (m-6-2.south east);
+    \fill[green!12] (m-3-3.north west) rectangle (m-6-3.south east);
+    \fill[orange!14] (m-4-4.north west) rectangle (m-6-4.south east);
+    \fill[red!12] (m-5-5.north west) rectangle (m-6-5.south east);
+  \end{scope}
+  \node[below=2pt of m-6-2, font=\footnotesize, text=blue!60!black] {$\coef0 f(x{+}b)$};
+  \node[below=2pt of m-6-3, font=\footnotesize, text=green!50!black] {$\coef1 f(x{+}b)$};
+  \node[below=2pt of m-6-4, font=\footnotesize, text=orange!80!black] {$\coef2 f(x{+}b)$};
+  \node[below=2pt of m-6-5, font=\footnotesize, text=red!70!black] {$\coef3 f(x{+}b)$};
+\end{tikzpicture}
+\caption{平移的係數：每一列是 $a_m(x+b)^m$ 的二項式展開，每一\emph{直欄}往下加總就是 $f(x+b)$ 的一個係數。
+直欄是無窮長的，所以這是「半形式」運算，需要 $f$ 收斂才能交換求和順序。}
+\label{fig:taylor-shift}
+\end{figure}
+
+論文接著證明平移「行為正常」：
+\begin{itemize}
+  \item \textbf{命題 3.4}：$f((x+c)+d)=f(x+(c+d))$（先平移 $c$ 再平移 $d$，等於一次平移 $c+d$）。
+        證明是把兩層二項式係數乘開、交換求和順序、再用一次二項式定理 $(c+d)^{l-n}$。
+  \item \textbf{命題 3.5}：$(fg)(x+c)=f(x+c)\,g(x+c)$（平移和乘法可交換）。
+        證明在交換求和順序後，恰好出現 Vandermonde 恆等式 $\sum_k\binom mk\binom l{n-k}=\binom{m+l}n$。
+\end{itemize}
+這兩個對函數來說「理所當然」的事實，在係數世界裡都要動手算，
+而且每次交換求和順序都要用收斂性背書。這就是作者說的「技術細節」。
+
+\subsection{半形式的指數律：命題 3.6}
+
+\[
+  \Exp\Big((ax)+\frac ba\Big)=\e^{b}\cdot\Exp(ax)\qquad(a\neq0)\,.
+\]
+對函數而言這只是 $\e^{a(x+b/a)}=\e^{ax+b}=\e^b\e^{ax}$。在係數世界裡：
+\[
+  \coef{n}\Exp\Big((ax)+\frac ba\Big)=\sum_{m\ge n}\binom mn\frac{a^m}{m!}\Big(\frac ba\Big)^{m-n}
+  =\frac{a^n}{n!}\sum_{m\ge n}\frac{b^{m-n}}{(m-n)!}=\frac{a^n}{n!}\sum_{l\ge0}\frac{b^l}{l!}=\e^b\cdot\frac{a^n}{n!}\,.
+\]
+中間用 $\binom mn\frac1{m!}=\frac{1}{n!\,(m-n)!}$，最後「把常數 $\e^b$ 提出來」。
+注意 $\e^b$ 在這裡是一個\emph{數}（級數的和），不是函數。論文只用 $a=-1$ 的情形：
+$\Exp\big((-x)+(-b)\big)=\e^{b}\Exp(-x)$，也就是希爾伯特證明第二個等式「$\e^{j}\e^{-x}=\e^{-(x-j)}$」的翻譯。
+
+\subsection{牛頓積分與廣義牛頓積分}
+
+\begin{prereq}{牛頓積分（定義 3.7）}
+對 $f\in\R\{x\}$ 與實數 $u,v$，定義
+\[
+  \int_u^{v}f:=\Big(\int f\Big)(v)-\Big(\int f\Big)(u)=\sum_{n\ge0}a_n\frac{v^{n+1}}{n+1}-\sum_{n\ge0}a_n\frac{u^{n+1}}{n+1}\,.
+\]
+這就是微積分基本定理「$F(v)-F(u)$」被拿來當\emph{定義}：先逐項積分得到 FPS $\int f$，再代值。
+名字來自牛頓，因為他把積分看成「反微分再代值」，而不是黎曼的「面積極限」。
+\end{prereq}
+它立刻有線性（命題 3.8）、可加性（命題 3.9：$\int_u^w=\int_u^v+\int_v^w$，只是代數重排）。
+\textbf{平移（命題 3.10）}$\int_u^{v}f(x+b)=\int_{u+b}^{v+b}f(x)$ 比較費事：
+把定義 3.3 的雙重和代入，用 $\binom{m+1}{n+1}=\frac{m+1}{n+1}\binom mn$ 整理，交換求和順序，
+補上一個「$l=0$ 的項」（它在相減時抵消），最後用二項式定理把 $\sum_l\binom{m+1}{l}b^{m+1-l}v^{l}$
+收成 $(v+b)^{m+1}$。這對應圖 \ref{fig:shift} 的「面積平移不變」。
+
+\begin{prereq}{廣義牛頓積分（定義 3.11）}
+若對\emph{每一個}趨近 $+\infty$ 的實數列 $(b_n)$，極限 $L=\lim_n\int_u^{b_n}f$ 都存在，
+則 $L$ 與數列的選取無關，定義 $\int_u^{+\infty}f:=L$。
+\end{prereq}
+用「數列的極限」而不是「$x\to+\infty$ 的極限」是刻意的：數列是可數物件。
+線性（3.12）、可加性（3.13）、平移（3.14）都從有限版本加上「極限的四則運算」得到。
+
+\subsection{兩個估計：命題 3.15 與形式版歐拉恆等式 3.16}
+
+\paragraph{命題 3.15（$A_r$ 要用的粗估）。}
+$\big|\int_0^{i}x^k\Exp(-x)\big|\le i^{k+1}\e^{i}$。
+理由：$x^k\Exp(-x)=\sum_n\frac{(-1)^n}{n!}x^{n+k}$，原函數是 $\sum_n\frac{(-1)^n}{n!(n+k+1)}x^{n+k+1}$，
+代 $x=i$ 後把每一項取絕對值、把 $\frac1{n+k+1}\le1$ 放掉，得 $\sum_n\frac{i^{n+k+1}}{n!}=i^{k+1}\e^{i}$。
+這取代了第 \ref{sec:calc} 節的「高度 $\times$ 寬度」估計，因為那個估計用到「函數在區間上的最大值」，
+那是一個關於不可數集合的概念。
+
+\paragraph{命題 3.16（歐拉恆等式的 FPS 版）。}
+\[
+  I_k:=\int_0^{+\infty}x^k\Exp(-x)=k!\,.
+\]
+證明和定理 \ref{thm:euler} 一樣是歸納，但「分部積分」被換成一條純係數的等式。令 $F_k=x^k\Exp(-x)$，
+由乘積法則（命題 3.1）與 $\Exp(-x)'=-\Exp(-x)$：
+\[
+  F_k'=kx^{k-1}\Exp(-x)-x^{k}\Exp(-x)=kF_{k-1}-F_k\quad\Longrightarrow\quad F_k=kF_{k-1}-F_k'\,.
+\]
+兩邊取 $\int_0^{a_n}$（$a_n\to\infty$），用線性與 $\int F_k'=F_k-\coef0F_k=F_k$：
+\[
+  I_k=k\,I_{k-1}-\lim_{n}\big(F_k(a_n)-F_k(0)\big)=k\,I_{k-1}-0=k!\,,
+\]
+其中 $F_k(0)=0$，而 $F_k(a_n)=a_n^{k}\e^{-a_n}\to0$（第 \ref{sec:calc} 節）。
+$k=0$ 時 $\int\Exp(-x)=1-\Exp(-x)$，所以 $I_0=\lim_n(1-\e^{-a_n})=1$。
+
+\subsection{收尾：希爾伯特的證明，逐條加上註腳}
+
+現在重做第 \ref{sec:hilbert} 節，但每一步都引用一條命題。假設 $a_0+a_1\e+\cdots+a_n\e^n=0$，$a_0\neq0$。
+乘上 $\int_0^{+\infty}p_r(x)\Exp(-x)$（存在：由 3.12 線性與 3.16），用 3.13 可加性把第 $i$ 項從 $i$ 切開，得 $0=A_r+B_r$。
+$B_r$ 的計算：
+\begin{align*}
+  B_r&=\sum_{i=0}^{n}a_i\e^{i}\int_i^{+\infty}p_r(x)\cdot\Exp(-x) \\
+     &=\sum_{i=0}^{n}a_i\int_i^{+\infty}p_r(x)\cdot\e^{i}\Exp(-x) &&\text{命題 3.12：常數 $\e^i$ 可以移進積分}\\
+     &=\sum_{i=0}^{n}a_i\int_i^{+\infty}p_r(x)\cdot\Exp\big((-x)+(-i)\big) &&\text{命題 3.6：半形式指數律}\\
+     &=\sum_{i=0}^{n}a_i\int_0^{+\infty}p_r(x+i)\cdot\Exp\big(((-x)+(-i))+i\big) &&\text{命題 3.14 平移積分 $+$ 3.5 平移乘積}\\
+     &=\sum_{i=0}^{n}a_i\int_0^{+\infty}p_r(x+i)\cdot\Exp(-x) &&\text{命題 3.4：$(-i)+i=0$ 的兩次平移抵消}\,.
+\end{align*}
+再用 3.12 與 3.16 把每個 $x^m$ 換成 $m!$：$B_r=\pm a_0(n!)^{r+1}r!+m_r(r+1)!$，和希爾伯特一模一樣。
+至於 $A_r$：$p_r$ 的次數 $<(n+1)(r+1)$，每個係數絕對值 $\le l^{r+1}$（$l$ 只和 $n$ 有關），
+由 3.8 線性與 3.15，每個 $\big|\int_0^{i}p_r\Exp(-x)\big|\le(n+1)(r+1)\cdot l^{r+1}\cdot n^{(n+1)(r+1)}\cdot\e^{n}$，
+所以 $|A_r|\le c^{r}$。同樣的矛盾結束證明。$\qed$
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small, node distance=0.45cm]
+  \node[box, fill=gray!8, text width=11.5cm] (a) {$\displaystyle\sum_i a_i\e^{i}\int_i^{+\infty}p_r(x)\Exp(-x)$};
+  \node[box, fill=blue!6, text width=11.5cm, below=of a] (b) {$\displaystyle\sum_i a_i\int_i^{+\infty}p_r(x)\,\Exp\big((-x)+(-i)\big)$};
+  \node[box, fill=orange!8, text width=11.5cm, below=of b] (c) {$\displaystyle\sum_i a_i\int_0^{+\infty}p_r(x+i)\,\Exp(-x)$};
+  \node[box, fill=green!10, text width=11.5cm, below=of c] (d) {$\pm a_0(n!)^{r+1}\,r!\;+\;m_r\,(r+1)!$};
+  \draw[arr] (a) -- (b) node[midway, right, xshift=4pt, font=\footnotesize] {3.12 線性，3.6 指數律};
+  \draw[arr] (b) -- (c) node[midway, right, xshift=4pt, font=\footnotesize] {3.14 平移積分，3.5 平移乘積，3.4 合併平移};
+  \draw[arr] (c) -- (d) node[midway, right, xshift=4pt, font=\footnotesize] {3.12 線性，3.16 形式歐拉恆等式};
+\end{tikzpicture}
+\caption{$B_r$ 的計算鏈，每一箭頭標註所用的命題編號。
+和第 \ref{sec:hilbert} 節比對：三個箭頭正好對應「指數律」「平移換元」「歐拉恆等式」。}
+\label{fig:br-chain}
+\end{figure}
+
+\begin{warnbox}
+容易忽略的一點：在 $\R\{x\}$ 裡，$\e^{i}$ 與 $\Exp$ 是不同類型的東西。
+$\e^{i}=\sum_l i^l/l!$ 是一個實數（用戴德金分割表示），而 $\Exp(-x)$ 是一串係數。
+命題 3.6 的功勞就是把「數 $\times$ 級數」改寫成「級數的平移」，這樣才能和 $p_r$ 一起平移。
+\end{warnbox}

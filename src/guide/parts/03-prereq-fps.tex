@@ -1,0 +1,189 @@
+\section{形式冪級數、有理冪級數與極點}\label{sec:fps}
+
+論文標題裡的「形式冪級數」（formal power series，FPS）是第二、三節的主角。
+它的想法很簡單：\emph{一個寫不完的多項式}。
+
+\subsection{什麼是形式冪級數}
+
+\begin{prereq}{形式冪級數 $\R[[x]]$}
+一個（實係數）\textbf{形式冪級數}是一個形如
+\[
+  f(x)=a_0+a_1x+a_2x^2+a_3x^3+\cdots=\sum_{n\ge0}a_nx^n\qquad(a_n\in\R)
+\]
+的「無窮多項式」。重點在「形式」兩個字：\textbf{$x$ 只是一個佔位符號，不是數}；
+我們\emph{不}把數字代進 $x$，所以完全不必擔心「收不收斂」。
+一個 FPS 的全部資訊就是它的係數序列 $(a_0,a_1,a_2,\ldots)$。
+所有實係數 FPS 的集合記作 $\R[[x]]$；係數限制在 $\Z$、$\Q$、$\C$ 時分別記作
+$\Z[[x]]$、$\Q[[x]]$、$\C[[x]]$。多項式 $\R[x]$ 是「從某一項起係數全為 $0$」的 FPS。
+
+\textbf{記號} $\coef{n}f$ 表示 $f$ 的 $x^n$ 係數，即 $\coef{n}f=a_n$。
+\end{prereq}
+
+\begin{prereq}{FPS 的四則與微積分（全部只是「對係數做事」）}
+令 $f=\sum a_nx^n$，$g=\sum b_nx^n$。
+\begin{itemize}
+  \item \textbf{加法}：$\coef{n}(f+g)=a_n+b_n$。
+  \item \textbf{乘法}：像多項式一樣展開再合併同類項，
+        \[
+          \coef{n}(fg)=a_0b_n+a_1b_{n-1}+\cdots+a_nb_0=\sum_{k=0}^{n}a_kb_{n-k}\,.
+        \]
+        每個係數都是\emph{有限}的和，所以永遠算得出來（見圖 \ref{fig:cauchy}）。
+  \item \textbf{導數}：逐項微分，$f'=\sum_{n\ge0}(n+1)a_{n+1}x^n$。
+        乘積法則 $(fg)'=f'g+fg'$ 仍然成立。
+  \item \textbf{原函數}：逐項積分，$\int f:=\sum_{n\ge0}\dfrac{a_n}{n+1}x^{n+1}$（常數項取 $0$）。
+        於是 $\big(\int f\big)'=f$，而 $\int f'=f-a_0$。
+  \item \textbf{代入 $ax$}：$f(ax):=\sum a^na_nx^n$。例如 $f(-x)=a_0-a_1x+a_2x^2-\cdots$。
+\end{itemize}
+\end{prereq}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small]
+  \matrix (m) [matrix of math nodes, nodes={minimum width=1.5cm, minimum height=0.8cm, anchor=center},
+               column sep=1pt, row sep=1pt, nodes in empty cells] {
+    & b_0 & b_1 & b_2 & b_3 \\
+    a_0 & a_0b_0 & a_0b_1 & a_0b_2 & a_0b_3 \\
+    a_1 & a_1b_0 & a_1b_1 & a_1b_2 & a_1b_3 \\
+    a_2 & a_2b_0 & a_2b_1 & a_2b_2 & a_2b_3 \\
+    a_3 & a_3b_0 & a_3b_1 & a_3b_2 & a_3b_3 \\
+  };
+  \begin{scope}[on background layer]
+    \fill[blue!15] (m-2-2.north west) rectangle (m-2-2.south east);
+    \fill[green!15] (m-2-3.north west) rectangle (m-2-3.south east);
+    \fill[green!15] (m-3-2.north west) rectangle (m-3-2.south east);
+    \fill[orange!18] (m-2-4.north west) rectangle (m-2-4.south east);
+    \fill[orange!18] (m-3-3.north west) rectangle (m-3-3.south east);
+    \fill[orange!18] (m-4-2.north west) rectangle (m-4-2.south east);
+    \fill[red!15] (m-2-5.north west) rectangle (m-2-5.south east);
+    \fill[red!15] (m-3-4.north west) rectangle (m-3-4.south east);
+    \fill[red!15] (m-4-3.north west) rectangle (m-4-3.south east);
+    \fill[red!15] (m-5-2.north west) rectangle (m-5-2.south east);
+  \end{scope}
+  \node[anchor=west, text=blue!60!black] at ([xshift=4mm]m-2-5.east) {};
+  \node[right=0.9cm of m-3-5, align=left, text width=4.6cm] {
+    同一條「反對角線」上 $k+l$ 相同，\\
+    加起來就是 $\coef{n}(fg)$：\\[2pt]
+    \textcolor{blue!60!black}{$n=0$}：$a_0b_0$\\
+    \textcolor{green!50!black}{$n=1$}：$a_0b_1+a_1b_0$\\
+    \textcolor{orange!80!black}{$n=2$}：$a_0b_2+a_1b_1+a_2b_0$\\
+    \textcolor{red!70!black}{$n=3$}：$a_0b_3+a_1b_2+a_2b_1+a_3b_0$};
+\end{tikzpicture}
+\caption{兩個冪級數相乘。乘積的第 $n$ 個係數只用到 $a_0,\ldots,a_n$ 與 $b_0,\ldots,b_n$，
+是有限和，不需要任何極限。第 \ref{sec:numbers} 節證明 $\e^{a+b}=\e^a\e^b$ 時的「重新分組」
+正是這張圖。}
+\label{fig:cauchy}
+\end{figure}
+
+\begin{exmp}[幾何級數與形式指數]
+\begin{enumerate}
+  \item $(1-x)(1+x+x^2+x^3+\cdots)=1$：按乘法規則，$n\ge1$ 的係數是 $1\cdot1+(-1)\cdot1=0$。
+        所以在 $\R[[x]]$ 裡我們\emph{定義} $\dfrac{1}{1-x}:=1+x+x^2+\cdots$。
+        這句話不牽涉任何收斂，純粹是代數；高中「無窮等比級數 $|x|<1$」的條件在這裡不需要。
+  \item 論文定義 3.2 的\textbf{形式指數} $\Exp(x):=\sum_{n\ge0}\dfrac{x^n}{n!}\in\Q[[x]]$。
+        逐項微分得 $\Exp'=\Exp$，逐項積分得 $\int\Exp=\Exp-1$。
+        注意：$\Exp$ 是一串係數 $(1,1,\tfrac12,\tfrac16,\ldots)$，而 $\e^x$ 是函數；
+        兩者在第 \ref{sec:klazar} 節才會被「半形式」運算連結起來。
+\end{enumerate}
+\end{exmp}
+
+\begin{prereq}{收斂的 FPS：$\R\{x\}$}
+有些 FPS 可以「代數字進去」：如果對\emph{每一個}實數 $b$，數列
+$\sum_{n=0}^{N}a_nb^n$ 都在 $N\to\infty$ 時收斂，就說 $f$ 是\textbf{收斂的}（收斂半徑無窮大），
+並把極限記作 $f(b)$。這種 FPS 的集合記作 $\R\{x\}$。$\Exp$ 與所有多項式都屬於 $\R\{x\}$，
+而 $\frac1{1-x}=\sum x^n$ \emph{不}屬於（代 $b=2$ 就發散）。
+論文第三節只在 $\R\{x\}$ 裡工作，因為它需要「代值」這個動作。
+\end{prereq}
+
+\subsection{有理冪級數、部分分式與極點}\label{sec:rational}
+
+\begin{prereq}{有理 FPS}
+$f\in\C[[x]]$ 叫做\textbf{有理的}，如果存在多項式 $p,q\in\C[x]$，$q(0)=1$，使得 $q(x)f(x)=p(x)$。
+直覺：$f=\dfrac{p}{q}$ 是一個「分式」展開成的冪級數。
+有理 FPS 的和、積、導數仍是有理的（通分、乘開、商的微分法則）。
+\end{prereq}
+
+\begin{exmp}\label{ex:pole}
+$\dfrac{1}{1-2x}=\sum_{n\ge0}2^nx^n$（驗證：$(1-2x)\sum2^nx^n$ 的 $n\ge1$ 係數是 $2^n-2\cdot2^{n-1}=0$）。
+把它看成函數時，在 $x=\tfrac12$ 分母為 $0$，圖形有垂直漸近線（圖 \ref{fig:pole}）；
+這個點叫做\textbf{極點}（pole）。係數 $2^n$ 的成長速度正好反映極點的位置：
+極點在 $1/\alpha$ 時，係數像 $\alpha^n$ 一樣成長。
+\end{exmp}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=12cm, height=6.5cm, xmin=-1.6, xmax=1.6, ymin=-8, ymax=8,
+  xlabel={$x$}, ylabel={$y$}, samples=300, no markers, restrict y to domain=-8:8,
+  every axis plot/.append style={thick}]
+  \addplot[blue!10, fill=blue!10, draw=none, domain=-0.5:0.5] {8} \closedcycle;
+  \addplot[blue!10, fill=blue!10, draw=none, domain=-0.5:0.5] {-8} \closedcycle;
+  \addplot[blue!70!black, domain=-1.6:0.49] {1/(1-2*x)};
+  \addplot[blue!70!black, domain=0.51:1.6] {1/(1-2*x)};
+  \draw[dashed, red!70!black, thick] (axis cs:0.5,-8) -- (axis cs:0.5,8);
+  \node[font=\footnotesize, red!70!black, anchor=west] at (axis cs:0.55,6.5) {極點 $x=\frac12$};
+  \node[font=\footnotesize, blue!60!black] at (axis cs:-0.05,-6.3) {級數 $\sum 2^nx^n$ 在此收斂};
+  \draw[orange!80!black, thick, dashed, domain=-0.5:0.5, samples=50] plot (\x, {1+2*\x+4*\x*\x+8*\x*\x*\x});
+\end{axis}
+\end{tikzpicture}
+\caption{$y=\dfrac{1}{1-2x}$ 與它的極點。橘色虛線是前四項 $1+2x+4x^2+8x^3$，
+只在 $|x|<\frac12$（藍色帶）貼近曲線。在 FPS 的世界裡我們不代值，所以只需要記住：
+「分母 $1-\alpha x$」$\leftrightarrow$「極點 $1/\alpha$」$\leftrightarrow$「係數成長 $\alpha^n$」。}
+\label{fig:pole}
+\end{figure}
+
+\begin{prereq}{部分分式與極點的階}
+高中學過把 $\dfrac{1}{(1-x)(1-2x)}$ 拆成 $\dfrac{-1}{1-x}+\dfrac{2}{1-2x}$。一般地，
+若 $q(x)=\prod_{j=1}^{t}(1-\alpha_jx)^{m_j}$（$\alpha_j$ 互不相同、皆非零），則每個有理 FPS
+$p/q$ 都可唯一寫成
+\[
+  f(x)=r(x)+\sum_{j=1}^{t}\sum_{i=1}^{m_j}\frac{\beta_{j,i}}{(1-\alpha_jx)^{i}}\,,
+  \qquad r\in\C[x],\ \beta_{j,m_j}\neq0\,.
+\]
+我們說 $1/\alpha_j$ 是 $f$ 的\textbf{極點}，\textbf{階}（order）是 $m_j$，
+也就是分母裡 $(1-\alpha_jx)$ 出現的最高次數。每個部分分式本身是 FPS：
+\[
+  \frac{1}{(1-\alpha x)^{i}}=\sum_{n\ge0}\binom{n+i-1}{i-1}\alpha^nx^n\,,
+\]
+例如 $\frac{1}{(1-\alpha x)^2}=\sum(n+1)\alpha^nx^n$。
+（論文寫成 $\binom{-i}{n}(-\alpha)^n$ 的形式，兩者相同：
+$\binom{-i}{n}:=\frac{(-i)(-i-1)\cdots(-i-n+1)}{n!}=(-1)^n\binom{n+i-1}{n}$。）
+\end{prereq}
+
+\begin{keyidea}[極點的階在運算下如何變化（論文命題 2.1 的全部內容）]
+設 $A(x)$ 是有理 FPS，$1/\alpha$ 是它的 $m$ 階極點。
+\begin{itemize}
+  \item \textbf{微分讓階數加一}：$\Big(\dfrac{1}{(1-\alpha x)^m}\Big)'=\dfrac{m\alpha}{(1-\alpha x)^{m+1}}$。
+        所以 $A'$ 在 $1/\alpha$ 有 $m+1$ 階極點。
+  \item \textbf{乘上多項式不會製造新極點}，只可能降低階數或把極點消掉
+        （若多項式含因子 $(1-\alpha x)$）。例如 $(1-\alpha x)\cdot\dfrac{1}{(1-\alpha x)^m}=\dfrac{1}{(1-\alpha x)^{m-1}}$。
+  \item \textbf{相加時}，若兩個級數在同一點的階數不同，和的階數是較大的那個（高階項不可能被低階項消掉）。
+\end{itemize}
+把三點合起來：$p(x)A(x)+c\,x^{m}A'(x)$（$c\neq0$）的極點就是 $c\,x^mA'(x)$ 的極點，每個階數都至少 $2$；
+除非 $A$ 根本是多項式。這就是論文的命題 2.1。
+\end{keyidea}
+
+\subsection{有理 $\Leftrightarrow$ 線性遞迴}
+
+高中學過費氏數列 $F_0=0$、$F_1=1$、$F_n=F_{n-1}+F_{n-2}$。它的\textbf{生成函數}
+$F(x)=\sum F_nx^n$ 滿足
+\[
+  (1-x-x^2)F(x)=x\,,
+\]
+因為左邊 $x^n$（$n\ge2$）的係數是 $F_n-F_{n-1}-F_{n-2}=0$。所以 $F(x)=\dfrac{x}{1-x-x^2}$ 是有理的。
+反過來也對：
+\begin{prereq}{有理 FPS 的係數滿足線性遞迴}
+若 $q(x)=1-a_1x-\cdots-a_tx^t$ 且 $q(x)f(x)$ 是一個次數 $<d$ 的多項式，則 $f$ 的係數 $v_n$ 滿足
+\[
+  v_n=a_1v_{n-1}+a_2v_{n-2}+\cdots+a_tv_{n-t}\qquad(n\ge d)\,.
+\]
+理由：$\coef{n}\big(q(x)f(x)\big)=v_n-a_1v_{n-1}-\cdots-a_tv_{n-t}$，而它在 $n\ge d$ 時為 $0$。
+\end{prereq}
+論文定理 2.2 的結論「$q(x)^kV(x)\in\Z[x]$」，翻成白話就是：
+\emph{$v_n$ 從某一項起滿足一個固定的線性遞迴}，係數來自 $q(x)^k$。
+而要證明 FPS 有理，只要證明「乘上 $q^k$ 之後，從某一項起係數全為 $0$」。
+這正是第 \ref{sec:bbr} 節的戰略。
+
+\begin{prereq}{大 $O$ 記號}
+「$v_n=O(A^n)$」的意思是：存在常數 $c>0$，使得對所有 $n$ 都有 $|v_n|\le c\,A^n$。
+它只說「成長不超過指數 $A^n$ 的某個倍數」，不管那個倍數多大。
+\end{prereq}

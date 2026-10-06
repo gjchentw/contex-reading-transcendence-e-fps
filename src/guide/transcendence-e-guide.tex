@@ -1,0 +1,125 @@
+% 論文導讀：M. Klazar, "The transcendence of e via formal power series"
+% 讀者：高中生。超出高中數學範圍的知識在第一部分先行說明。
+%
+% 編譯：scripts/compile.sh guide/transcendence-e-guide.tex
+%       -> build/transcendence-e-guide.pdf
+%
+% 內文分章放在 parts/ 之下，由本檔 \input。
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.4cm, bottom=2.6cm, left=2.2cm, right=2.2cm]{geometry}
+\usepackage{contex-cjk}   % 中文 + 拉丁字型與語言設定（環境提供）
+\usepackage{contex-stem}  % amsmath, amssymb, mathtools, booktabs, siunitx, tikz ...
+
+\usepackage{amsthm}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{matrix, shapes.geometric, fit, backgrounds, shadows}
+\usepackage[most]{tcolorbox}
+\usepackage[unicode, colorlinks, linkcolor=blue!55!black, citecolor=green!40!black,
+            urlcolor=blue!55!black]{hyperref}
+\pdfstringdefDisableCommands{\def\e{e}\def\Exp{Exp}\def\N{N}\def\Z{Z}\def\Q{Q}\def\R{R}\def\C{C}\def\dd{ d}}
+
+% ---------- 版面 ----------
+\renewcommand{\baselinestretch}{1.28}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.35em}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
+% ---------- 記號 ----------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\Exp}{\mathrm{Exp}}
+\newcommand{\coef}[1]{[x^{#1}]\,}
+\DeclareMathOperator{\ord}{ord}
+
+% ---------- 定理環境 ----------
+\theoremstyle{definition}
+\newtheorem{defn}{定義}[section]
+\newtheorem{thm}[defn]{定理}
+\newtheorem{prop}[defn]{命題}
+\newtheorem{lem}[defn]{引理}
+\newtheorem{exmp}[defn]{例子}
+\newtheorem{exer}[defn]{練習}
+\theoremstyle{remark}
+\newtheorem*{rem}{註}
+\newenvironment{pf}{\begin{proof}[證明]}{\end{proof}}
+
+% ---------- 彩色方框 ----------
+\newtcolorbox{prereq}[1]{%
+  enhanced, breakable, colback=blue!4, colframe=blue!50!black,
+  fonttitle=\bfseries, title={先備知識：#1}, left=1.2em, right=1em,
+  boxrule=0.6pt, arc=2pt}
+\newtcolorbox{keyidea}[1][關鍵想法]{%
+  enhanced, breakable, colback=orange!6, colframe=orange!70!black,
+  fonttitle=\bfseries, title={#1}, left=1.2em, right=1em, boxrule=0.6pt, arc=2pt}
+\newtcolorbox{paperbox}[1][論文原文對照]{%
+  enhanced, breakable, colback=gray!6, colframe=gray!55!black,
+  fonttitle=\bfseries, title={#1}, left=1.2em, right=1em, boxrule=0.6pt, arc=2pt}
+\newtcolorbox{warnbox}[1][小心]{%
+  enhanced, breakable, colback=red!4, colframe=red!60!black,
+  fonttitle=\bfseries, title={#1}, left=1.2em, right=1em, boxrule=0.6pt, arc=2pt}
+
+% ---------- 圖的共用樣式 ----------
+\tikzset{
+  box/.style={draw, rounded corners=3pt, align=center, inner sep=6pt, minimum height=2.2em,
+              fill=white, drop shadow={opacity=0.15}},
+  lbl/.style={font=\small},
+  arr/.style={-{Stealth[length=2.2mm]}, thick},
+}
+\pgfplotsset{every axis/.append style={font=\small, axis lines=middle,
+             xlabel style={at={(ticklabel* cs:1.02)}, anchor=west},
+             ylabel style={at={(ticklabel* cs:1.02)}, anchor=south}}}
+
+\title{\textbf{「用形式冪級數證明 $\e$ 是超越數」論文導讀}\\[0.6em]
+  \large 讀 M.~Klazar, \emph{The transcendence of $\e$ via formal power series}（arXiv:2601.01019）\\[0.3em]
+  \normalsize 寫給高中生的版本}
+\author{導讀撰寫：Claude}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+這份導讀陪你讀一篇數學論文。論文只有十幾頁，卻把三個證明「$\e$ 是超越數」的方法放在一起比較：
+希爾伯特（Hilbert）1893 年的古典分析證明、Beukers--Bézivin--Robba 在 1990 年用形式冪級數
+（formal power series，以下簡稱 FPS）給出的證明，以及作者 Klazar 把希爾伯特證明「翻譯」成
+FPS 語言的新證明。論文的真正主題不是「$\e$ 是超越數」這個事實（它早在 1873 年就被 Hermite
+證明），而是一個基礎論的問題：\emph{能不能不用「不可數集合」就證明它？}
+第一部分先把超出高中數學的知識補齊：代數數與超越數、$\e$ 的級數、階乘的成長速度、
+廣義積分與歐拉的恆等式、形式冪級數與極點、可數與不可數。第二到第四部分依序走過論文的三節，
+每一節都附上圖解。最後有習題與延伸閱讀。
+\end{abstract}
+
+\tableofcontents
+\clearpage
+
+\input{parts/00-intro}
+\clearpage
+\part{先備知識：高中課本沒教的部分}
+\input{parts/01-prereq-numbers}
+\input{parts/02-prereq-calculus}
+\input{parts/03-prereq-fps}
+\input{parts/04-prereq-countable}
+\clearpage
+\part{論文第一節：希爾伯特的證明，以及為什麼要「可數化」}
+\input{parts/05-hilbert}
+\clearpage
+\part{論文第二節：Beukers--Bézivin--Robba 的 FPS 證明}
+\input{parts/06-bbr}
+\clearpage
+\part{論文第三節：把希爾伯特的證明搬進形式冪級數}
+\input{parts/07-klazar}
+\clearpage
+\part{回顧、練習與延伸閱讀}
+\input{parts/08-conclusion}
+
+\end{document}

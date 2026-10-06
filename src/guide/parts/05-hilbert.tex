@@ -1,0 +1,182 @@
+\section{希爾伯特的證明，一步一步}\label{sec:hilbert}
+
+這一節對應論文第一節的前半（到 $\Box$ 為止）。有了第 \ref{sec:calc} 節的工具，
+整個證明可以在兩頁內講完，但每一步的「為什麼這樣設計」值得慢慢看。
+
+\begin{keyidea}[希爾伯特證明的藍圖]
+假設 $P:=a_0+a_1\e+\cdots+a_n\e^n=0$（整數係數，$a_0\neq0$）。對每個 $r\in\N$，
+造一個積分 $I_r=\int_0^{+\infty}p_r(x)\e^{-x}\dd x$，然後把 $0=P\cdot I_r$ 拆成兩塊：
+\[
+  0=P\,I_r=\underbrace{A_r}_{\text{「小量」：}|A_r|\le c^r}
+         +\underbrace{B_r}_{\text{「整數」：}r!\text{ 的倍數，且對無窮多個 }r\text{ 非零}}\,.
+\]
+於是對無窮多個 $r$，$r!\le|B_r|=|A_r|\le c^{r}$，與 $c^r/r!\to0$ 矛盾。
+這就是第 \ref{sec:irrational} 節的核心招數，$N=B_r/r!$。
+\end{keyidea}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.55cm and 0.8cm, font=\small]
+  \node[box, fill=red!6, text width=5.4cm] (h) {\textbf{反證假設}\\ $P=a_0+a_1\e+\cdots+a_n\e^n=0$，$a_0\ne0$};
+  \node[box, fill=gray!8, text width=5.4cm, below=of h] (p) {\textbf{設計多項式}\\ $p_r(x)=x^{r}\big((x-1)\cdots(x-n)\big)^{r+1}$\\
+     {\footnotesize 在 $0$ 有 $r$ 重根，在 $1,\ldots,n$ 有 $r{+}1$ 重根}};
+  \node[box, fill=gray!8, text width=5.4cm, below=of p] (i) {\textbf{乘上積分}\\ $0=P\cdot\displaystyle\int_0^{+\infty}p_r(x)\e^{-x}\dd x$\\
+     把第 $j$ 項的積分從 $j$ 切開：$\int_0^{j}+\int_j^{+\infty}$};
+  \node[box, fill=blue!8, text width=4.3cm, below left=0.8cm and -1.6cm of i] (a) {\textbf{$A_r=\sum a_j\e^{j}\int_0^{j}$}\\ 有限區間，粗估即可\\ $|A_r|\le c^{r}$};
+  \node[box, fill=orange!10, text width=4.6cm, below right=0.8cm and -1.6cm of i] (b) {\textbf{$B_r=\sum a_j\e^{j}\int_j^{+\infty}$}\\ 平移 $+$ 歐拉恆等式\\ $B_r=\pm a_0(n!)^{r+1}r!+m_r(r+1)!$};
+  \node[box, fill=green!10, text width=5.6cm, anchor=north] (c) at ($(a.south)!0.5!(b.south)+(0,-0.7cm)$) {\textbf{矛盾}\\ 取 $r+1$ 為大質數 $\Rightarrow B_r\neq0$，於是\\ $r!\le|B_r|=|A_r|\le c^{r}$，但 $c^r/r!\to0$};
+
+  \draw[arr] (h) -- (p); \draw[arr] (p) -- (i);
+  \draw[arr] (i) -- (a); \draw[arr] (i) -- (b);
+  \draw[arr] (a) -- (c); \draw[arr] (b) -- (c);
+\end{tikzpicture}
+\caption{希爾伯特證明的流程。}
+\label{fig:hilbert-flow}
+\end{figure}
+
+\subsection{第 0 步：為什麼可以假設 $a_0\neq0$}
+
+若 $a_0=0$，整個式子可以提出一個 $\e$ 來：$\e(a_1+a_2\e+\cdots)=0$，因為 $\e\neq0$，
+括號裡仍是 $0$，而且次數少了一。重複直到常數項非零即可。
+
+\subsection{第 1 步：多項式 $p_r(x)$ 的設計}
+
+\[
+  p_r(x)=x^{r}\big((x-1)(x-2)\cdots(x-n)\big)^{r+1}\,.
+\]
+它的設計目的全在「根的重數」（圖 \ref{fig:roots}）：
+\begin{itemize}
+  \item 在 $x=0$ 是 $r$ 重根：展開後最低次項是 $x^{r}$，係數是
+        \[
+          \big((-1)(-2)\cdots(-n)\big)^{r+1}=(-1)^{n(r+1)}(n!)^{r+1}\,,
+        \]
+        所以 $p_r(x)=\pm(n!)^{r+1}x^{r}+(\text{更高次項})$。
+  \item 在 $x=j$（$j=1,\ldots,n$）是 $r+1$ 重根：把 $x$ 換成 $x+j$ 後，
+        因子 $(x+j-j)^{r+1}=x^{r+1}$ 出現，所以 $p_r(x+j)=b\,x^{r+1}+c\,x^{r+2}+\cdots$，
+        最低次是 $x^{r+1}$，係數都是整數。
+\end{itemize}
+配合歐拉恆等式「積分把 $x^{m}$ 變成 $m!$」，第一點會產生一個「恰好是 $r!$ 倍、但不是 $(r+1)!$ 倍」的項，
+第二點產生的全是 $(r+1)!$ 的倍數。這個「$r!$ 與 $(r+1)!$ 的落差」就是整個證明的槓桿。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small]
+  \draw[arr] (-0.8,0) -- (8.2,0) node[below] {$x$};
+  \foreach \x/\l in {0/0,2/1,4/2,6/$n$} { \draw (\x,0.1) -- (\x,-0.1) node[below] {\l}; }
+  \node at (5,-0.35) {$\cdots$};
+  \fill[blue!70!black] (0,0) circle (3pt);
+  \node[above, blue!70!black, align=center] at (0,0.25) {$r$ 重根\\ {\footnotesize $x^{r}$}};
+  \foreach \x in {2,4,6} {
+    \fill[orange!80!black] (\x,0) circle (3pt);
+    \node[above, orange!80!black, align=center] at (\x,0.25) {$r{+}1$ 重根\\ {\footnotesize $(x-j)^{r+1}$}};
+  }
+\end{tikzpicture}
+\caption{$p_r(x)$ 的根。重根越多，多項式在該點附近「貼地」越久，這也是 $A_r$ 很小的直覺原因：
+在 $[0,n]$ 上 $p_r$ 一直被壓在 $0$ 附近。}
+\label{fig:roots}
+\end{figure}
+
+\subsection{第 2 步：把 $0=P\,I_r$ 拆成 $A_r+B_r$}
+
+$I_r=\int_0^{+\infty}p_r(x)\e^{-x}\dd x$ 存在（第 \ref{sec:calc} 節）。於是
+\[
+  0=P\,I_r=\sum_{j=0}^{n}a_j\e^{j}\int_0^{+\infty}p_r(x)\e^{-x}\dd x
+  =\underbrace{\sum_{j=0}^{n}a_j\e^{j}\int_0^{j}p_r(x)\e^{-x}\dd x}_{A_r}
+  +\underbrace{\sum_{j=0}^{n}a_j\e^{j}\int_j^{+\infty}p_r(x)\e^{-x}\dd x}_{B_r}\,,
+\]
+第 $j$ 項的積分從 $x=j$ 切成兩段（可加性）。$j=0$ 那一項的 $\int_0^0=0$，全部歸到 $B_r$。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=13cm, height=6.8cm, xmin=0, xmax=14.5, ymin=0, ymax=6.8,
+  xlabel={$x$}, ylabel={$y$}, samples=300, domain=0:14.5, no markers,
+  every axis plot/.append style={thick}, legend pos=north east, legend style={font=\footnotesize}]
+  \addplot[name path=f, black!80] {x*((x-1)*(x-2))^2*exp(-x)};
+  \path[name path=ax] (axis cs:0,0) -- (axis cs:14.5,0);
+  \addplot[blue!60, opacity=0.35] fill between[of=f and ax, soft clip={domain=0:1}];
+  \addplot[orange!80, opacity=0.35] fill between[of=f and ax, soft clip={domain=1:14.5}];
+  \draw[dashed, red!70!black] (axis cs:1,0) -- (axis cs:1,6.5);
+  \node[font=\footnotesize, red!70!black, anchor=west] at (axis cs:1.1,6.2) {$x=j=1$：切開點};
+  \node[font=\footnotesize, blue!60!black, anchor=west] at (axis cs:0.2,1.2) {$\int_0^{1}$（進 $A_r$，很小）};
+  \node[font=\footnotesize, orange!80!black] at (axis cs:7.5,2.2) {$\int_1^{+\infty}$（進 $B_r$）};
+  \legend{$p_1(x)\e^{-x}$，$n=2$}
+\end{axis}
+\end{tikzpicture}
+\caption{以 $n=2$、$r=1$、$j=1$ 為例：$p_1(x)=x\big((x-1)(x-2)\big)^2$。
+在 $[0,2]$ 上曲線幾乎貼著 $x$ 軸（因為 $0,1,2$ 都是根），
+真正的面積都在右邊。$r$ 越大，左邊壓得越扁，但右邊的面積像 $r!$ 一樣暴增。}
+\label{fig:split}
+\end{figure}
+
+\subsection{第 3 步：$A_r$ 很小}
+
+第 \ref{sec:calc} 節末尾已經算過：每個 $\big|\int_0^{j}p_r\e^{-x}\big|\le n\cdot n^{r}\cdot n^{n(r+1)}$。
+乘上 $|a_j|\e^{j}$ 再對 $j$ 相加，得到 $|A_r|\le c^{r}$，其中 $c\ge1$ 只和 $n$、$a_0,\ldots,a_n$ 有關，
+\emph{和 $r$ 無關}。這一點是關鍵：底數固定，指數才會輸給階乘。
+
+\subsection{第 4 步：$B_r$ 是 $r!$ 的倍數}
+
+這是論文第一節的那串四個等式，每一步用的工具都在第 \ref{sec:calc} 節：
+\begin{align*}
+  B_r&=\sum_{j=0}^{n}a_j\e^{j}\int_j^{+\infty}p_r(x)\,\e^{-x}\dd x
+  &&\text{（定義）}\\
+  &=\sum_{j=0}^{n}a_j\int_j^{+\infty}p_r\big((x-j)+j\big)\,\e^{-(x-j)}\dd x
+  &&\text{（$\e^{j}\e^{-x}=\e^{-(x-j)}$，指數律）}\\
+  &=\sum_{j=0}^{n}a_j\int_0^{+\infty}p_r(y+j)\,\e^{-y}\dd y
+  &&\text{（平移換元 $y=x-j$，圖 \ref{fig:shift}）}\\
+  &=\pm a_0(n!)^{r+1}\cdot r!+m_r\cdot(r+1)!\qquad(m_r\in\Z)
+  &&\text{（歐拉恆等式 \eqref{eq:euler-poly} $+$ $p_r$ 的展開）}\,.
+\end{align*}
+最後一步的細節：$j\ge1$ 時 $p_r(y+j)=\sum_{m\ge r+1}b_my^{m}$，積分後是 $\sum b_m\,m!$，
+每一項都是 $(r+1)!$ 的倍數；$j=0$ 時 $p_r(y)=\pm(n!)^{r+1}y^{r}+\sum_{m\ge r+1}b_my^{m}$，
+積分後是 $\pm(n!)^{r+1}r!+(\text{$(r+1)!$ 的倍數})$。把所有 $(r+1)!$ 的倍數收成 $m_r(r+1)!$。
+於是 $B_r$ 是整數，且被 $r!$ 整除。
+
+\subsection{第 5 步：$B_r\neq0$ 對無窮多個 $r$ 成立}
+
+把 $B_r$ 除以 $r!$：$\dfrac{B_r}{r!}=\pm a_0(n!)^{r+1}+m_r(r+1)$。若 $B_r=0$，則
+$\pm a_0(n!)^{r+1}=-m_r(r+1)$，即 $r+1$ 整除 $a_0(n!)^{r+1}$。
+現在挑 $r$ 使 $r+1$ 是\emph{大於 $|a_0|$ 與 $n$ 的質數}：這樣的 $r$ 有無窮多個，
+而這種質數不可能整除 $a_0(n!)^{r+1}$（它和 $a_0$、和 $n!$ 的每個因子都互質）。
+所以對這些 $r$，$B_r\neq0$，從而 $|B_r|\ge r!$。
+
+\subsection{第 6 步：矛盾}
+
+對這無窮多個 $r$：$r!\le|B_r|=|A_r|\le c^{r}$，即 $\dfrac{c^{r}}{r!}\ge1$。
+但第 \ref{sec:factorial} 節說 $c^{r}/r!\to0$。矛盾，所以 $P\neq0$：$\e$ 是超越數。$\qed$
+
+\begin{paperbox}
+論文第一節從「We suppose for the contradiction」到「$\Box$」就是以上六步。
+論文接著提到 Baker 與 Conrad 的版本只用有限區間的積分，以及希爾伯特用同樣方法證明 $\pi$ 超越。
+\end{paperbox}
+
+\begin{warnbox}
+初學者常問：「$A_r+B_r=0$ 不是對每個 $r$ 都成立嗎？為什麼還要『無窮多個 $r$』？」
+因為我們需要 $B_r\neq0$ 才能說 $|B_r|\ge r!$，而 $B_r\neq0$ 只在 $r+1$ 與 $a_0n!$ 互質時有保證。
+另外，「$c^r/r!\to0$」只告訴我們\emph{夠大}的 $r$ 會出事，所以需要的是「任意大的 $r$ 都有 $B_r\ne0$」，
+無窮多個正好夠用。
+\end{warnbox}
+
+\section{論文第一節後半：為什麼要消掉不可數集合}\label{sec:why-countable}
+
+讀完證明，論文話鋒一轉，談它真正的動機。第 \ref{sec:countable} 節已經解釋了詞彙，這裡整理論點。
+
+\begin{enumerate}
+  \item \textbf{問題}：證明用了函數 $F(x)=p(x)\e^{-x}\colon[0,+\infty)\to\R$。
+        作為點對的集合，它不可數。能否消掉所有這類「實質使用」？
+  \item \textbf{四點澄清}（論文原文的 1--4）：(1)「實質使用」靠直覺判斷；
+        (2) 數理邏輯早知道實分析可在二階算術裡做，但作者要的是不必懂邏輯的簡單做法；
+        (3) 消掉之後，剩下的集合不只要可數，還要\emph{遺傳}可數；
+        (4) 為此，實數用戴德金分割表示。
+  \item \textbf{希爾伯特會怎麼說}：$F$ 是解析函數，換成它的係數序列就好。
+  \item \textbf{兩條路}：作者在第三節實作這個建議（「技術細節沒有想像中直接」），
+        同時發現 Beukers--Bézivin--Robba 在 1990 年早就有一個 FPS 證明，
+        只是動機不同（他們沒提可數性），而且想法完全不同：
+        \emph{若 $\e$ 是代數數，某個微分方程會有有理 FPS 解，而極點的階數說這不可能。}
+  \item \textbf{第三條路}（論文引用作者另一篇文章）：不用 FPS，
+        直接把函數限制在有理數上：$F|_{[0,+\infty)\cap\Q}$ 是可數的。
+        代價是要重建一套「可數實分析」，例如連續函數在閉區間上有界這種定理對 $\Q$ 上的函數會失敗
+        （可以造出 $[0,1]\cap\Q$ 上連續但無界的函數），必須改用「一致連續」來補救。
+        這條路不在本論文範圍，知道有這回事即可。
+\end{enumerate}

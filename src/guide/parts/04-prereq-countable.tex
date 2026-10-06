@@ -1,0 +1,186 @@
+\section{可數與不可數：論文真正關心的事}\label{sec:countable}
+
+論文第一節後半的討論，對高中生來說可能是最陌生的：作者說希爾伯特的證明
+「實質上使用了不可數集合」，並想把它們消掉。要懂這句話，先得知道「可數」是什麼。
+
+\subsection{可數集合}
+
+\begin{prereq}{可數（countable）}
+一個集合是\textbf{可數的}，如果它的元素可以\emph{排成一列}
+$x_1,x_2,x_3,\ldots$（每個元素都在某個位置出現，可以有限也可以無限）。
+換句話說，它的元素能和正整數 $1,2,3,\ldots$ 一一對應（或者更少）。
+\end{prereq}
+
+\begin{exmp}
+\begin{itemize}
+  \item $\N$ 當然可數。$\Z$ 也可數：排成 $0,1,-1,2,-2,3,-3,\ldots$。
+  \item $\Q$ 可數，雖然有理數在數線上「密密麻麻」。圖 \ref{fig:zigzag} 給出排法。
+  \item 可數集合的「有限多個」或「可數多個」聯集仍可數；可數集合的子集仍可數。
+\end{itemize}
+\end{exmp}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small, scale=1.0]
+  \foreach \p in {1,...,5} {
+    \foreach \q in {1,...,5} {
+      \node (n\p\q) at (1.5*\q, -1.1*\p) {$\frac{\p}{\q}$};
+    }
+  }
+  \draw[arr, red!70!black] (n11) -- (n12);
+  \draw[arr, red!70!black] (n12) -- (n21);
+  \draw[arr, red!70!black] (n21) -- (n31);
+  \draw[arr, red!70!black] (n31) -- (n22);
+  \draw[arr, red!70!black] (n22) -- (n13);
+  \draw[arr, red!70!black] (n13) -- (n14);
+  \draw[arr, red!70!black] (n14) -- (n23);
+  \draw[arr, red!70!black] (n23) -- (n32);
+  \draw[arr, red!70!black] (n32) -- (n41);
+  \draw[arr, red!70!black] (n41) -- (n51);
+  \draw[arr, red!70!black] (n51) -- (n42);
+  \draw[arr, red!70!black] (n42) -- (n33);
+  \draw[arr, red!70!black] (n33) -- (n24);
+  \draw[arr, red!70!black] (n24) -- (n15);
+  \node[anchor=west, align=left, text width=5.2cm] at (8.6,-3.3) {
+    沿著箭頭走，每一個正有理數都會被走到（重複的像 $\frac22=\frac11$ 跳過即可）。\\[3pt]
+    走到的順序：$1,\frac12,2,3,\frac22,\frac13,\frac14,\frac23,\frac32,4,\ldots$\\[3pt]
+    所以正有理數可以排成一列：$\Q$ 是可數的。};
+\end{tikzpicture}
+\caption{把正有理數排成一列（Cantor 的「之」字形走法）。}
+\label{fig:zigzag}
+\end{figure}
+
+\subsection{實數不可數：Cantor 的對角線}
+
+\begin{thm}[Cantor, 1874/1891]
+區間 $[0,1)$ 裡的實數\emph{不可數}。
+\end{thm}
+\begin{pf}[證明（對角線論證）]
+假設 $[0,1)$ 的所有實數可以排成一列 $x_1,x_2,x_3,\ldots$，把每個數寫成無窮小數
+（規定不用 $9$ 循環的寫法，使寫法唯一）：
+\[
+  x_1=0.\,\mathbf{d_{11}}\,d_{12}\,d_{13}\ldots,\quad
+  x_2=0.\,d_{21}\,\mathbf{d_{22}}\,d_{23}\ldots,\quad
+  x_3=0.\,d_{31}\,d_{32}\,\mathbf{d_{33}}\ldots,\quad\ldots
+\]
+造一個新數 $y=0.\,c_1c_2c_3\ldots$，規定 $c_n=5$ 若 $d_{nn}\neq5$、$c_n=6$ 若 $d_{nn}=5$。
+則 $y$ 的第 $n$ 位和 $x_n$ 的第 $n$ 位不同，所以 $y\neq x_n$ 對每個 $n$ 都成立，
+$y$ 不在列表裡。矛盾。
+\end{pf}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small]
+  \matrix (m) [matrix of nodes, nodes={minimum width=0.75cm, minimum height=0.7cm, anchor=center},
+               column sep=1pt, row sep=1pt] {
+    $x_1=0.$ & 3 & 1 & 4 & 1 & 5 & $\cdots$ \\
+    $x_2=0.$ & 7 & 0 & 7 & 1 & 0 & $\cdots$ \\
+    $x_3=0.$ & 1 & 4 & 1 & 4 & 2 & $\cdots$ \\
+    $x_4=0.$ & 5 & 0 & 0 & 0 & 0 & $\cdots$ \\
+    $x_5=0.$ & 2 & 7 & 1 & 8 & 2 & $\cdots$ \\
+    $\vdots$ & & & & & & \\
+    $y\;=0.$ & 5 & 5 & 5 & 5 & 5 & $\cdots$ \\
+  };
+  \begin{scope}[on background layer]
+    \foreach \i in {1,...,5} {
+      \pgfmathtruncatemacro{\j}{\i+1}
+      \fill[red!18] (m-\i-\j.north west) rectangle (m-\i-\j.south east);
+    }
+    \fill[blue!12] (m-7-2.north west) rectangle (m-7-6.south east);
+  \end{scope}
+  \node[anchor=west, text width=5.4cm, align=left] at ([xshift=6mm]m-3-7.east)
+    {紅色是對角線上的數字 $d_{nn}$。\\ 新數 $y$ 的第 $n$ 位故意和 $d_{nn}$ 不同（這裡 $d_{nn}\ne5$ 就填 $5$，
+     $d_{nn}=5$ 就填 $6$），所以 $y$ 和列表裡的每一個數都至少差一位。};
+\end{tikzpicture}
+\caption{對角線論證。不論怎麼列，都會漏掉某個實數，所以實數排不成一列。}
+\label{fig:diagonal}
+\end{figure}
+
+\subsection{「函數」是不可數集合，「係數序列」是可數的}
+
+在集合論裡，一個函數 $F\colon[0,+\infty)\to\R$ 被\emph{定義為}所有點對
+$\langle x,F(x)\rangle$ 組成的集合，也就是它的圖形。
+定義域 $[0,+\infty)$ 不可數，所以這個集合不可數。
+希爾伯特的證明用了函數 $F(x)=p(x)\e^{-x}$ 以及它的積分，
+作者說這就是證明裡「實質上使用不可數集合」的地方。
+
+那麼什麼是「可數的替代品」？論文借希爾伯特之口說（第一節末）：
+\emph{這些函數很特別，它們都是冪級數 $F(x)=\sum a_nx^n$，
+而係數序列 $(a_0,a_1,a_2,\ldots)$ 是可數的。要算 $F(b)$ 就算極限 $\lim_N\sum_{n\le N}a_nb^n$。
+把 $F$ 換成 $(a_0,a_1,\ldots)$ 就行了。}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small]
+  \begin{scope}
+    \draw[arr] (-0.3,0) -- (5,0) node[below] {$x$};
+    \draw[arr] (0,-0.3) -- (0,3) node[left] {$y$};
+    \draw[thick, blue!70!black, domain=0:4.8, samples=80] plot (\x, {2.6*\x*\x*exp(-\x)});
+    \foreach \x in {0.3,0.7,1.1,1.5,1.9,2.3,2.7,3.1,3.5,3.9,4.3} {
+      \fill[blue!70!black] (\x, {2.6*\x*\x*exp(-\x)}) circle (1.2pt);
+    }
+    \node[text width=4.6cm, align=center] at (2.4,-1.0) {函數 $F$ $=$ 所有點對 $\langle x,F(x)\rangle$ 的集合\\ \textbf{不可數}};
+  \end{scope}
+  \draw[arr, very thick, gray] (5.6,1.3) -- (7.0,1.3) node[midway, above, font=\footnotesize] {換成};
+  \begin{scope}[xshift=7.6cm]
+    \foreach \i/\v in {0/a_0,1/a_1,2/a_2,3/a_3,4/a_4} {
+      \node[draw, rounded corners=2pt, minimum width=0.9cm, minimum height=0.8cm, fill=orange!10]
+        at (1.0*\i, 1.3) {$\v$};
+    }
+    \node at (5.3,1.3) {$\cdots$};
+    \node[text width=5.2cm, align=center] at (2.6,-1.0) {係數序列 $(a_0,a_1,a_2,\ldots)$\\ \textbf{可數}（而且每個 $a_n$ 也可用可數物件表示）};
+  \end{scope}
+\end{tikzpicture}
+\caption{同一個資訊的兩種包裝。左邊的圖形有不可數多個點；右邊是一列數字。
+論文第三節要做的，就是證明希爾伯特證明裡的每一步都能只用右邊的包裝完成。}
+\label{fig:function-vs-sequence}
+\end{figure}
+
+\subsection{「遺傳可數」與戴德金分割}
+
+論文提出四點說明，其中第 3、4 點用了兩個名詞：
+
+\begin{prereq}{遺傳可數（hereditarily countable）與戴德金分割（Dedekind cut）}
+\begin{itemize}
+  \item 一個集合是\textbf{遺傳可數}的，如果它本身可數，它的每個元素（若是集合）也可數，
+        元素的元素也可數……一路到底。這是比「可數」更嚴格的要求：
+        例如 $\{\R\}$ 只有一個元素，當然可數，但它的元素 $\R$ 不可數，所以不是遺傳可數。
+  \item 為了讓「實數」本身是可數的物件，論文把每個實數 $b$ 表示成\textbf{戴德金分割}：
+        所有小於 $b$ 的有理數所成的集合 $\{q\in\Q: q<b\}$。因為 $\Q$ 可數，這個集合可數；
+        而它完全決定了 $b$（例如 $\sqrt2$ 對應 $\{q\in\Q: q<0\text{ 或 }q^2<2\}$）。
+\end{itemize}
+於是「一串實數 $(a_0,a_1,\ldots)$」是遺傳可數的：它是可數多個可數集合排成一列。
+\end{prereq}
+
+\begin{rem}
+論文也坦白說，「實質使用」（substantial use）這個詞沒有精確定義，只能靠直覺判斷：
+像「對所有 $|x|<1$ 的實數 $x$，$\sum x^n=\frac1{1-x}$」雖然提到 $\R$，
+但這句話可以輕易改寫成不提 $\R$ 的形式，所以不算實質使用。
+另外，數理邏輯早就知道（Weyl 1918 年起）整個實分析可以在「二階算術」裡進行，
+本來就是可數的事業；但論文想要的是\emph{不需要懂數理邏輯}、技術上更簡單的做法。
+這是一種數學家的品味，而不是對錯問題；高中生讀到這裡，只需知道「有人在意這件事」即可。
+\end{rem}
+
+\subsection{其他會用到的小工具}
+
+\begin{prereq}{下降階乘與組合數}
+記 $(n)_0=1$，$(n)_m=n(n-1)\cdots(n-m+1)$（$m$ 個連續遞減的因子）。則
+\[
+  (n)_m=m!\binom{n}{m}\qquad(n\ge m)\,,
+\]
+且 $n<m$ 時 $(n)_m=0$（因為乘到了 $0$）。
+論文第二節反覆用「$(n)_k$ 是 $k!$ 的倍數」這件事。
+\end{prereq}
+
+\begin{prereq}{Vandermonde 恆等式}
+\[
+  \sum_{k=0}^{n}\binom{m}{k}\binom{l}{n-k}=\binom{m+l}{n}\,.
+\]
+理由（算兩次）：從 $m$ 個男生、$l$ 個女生中選出 $n$ 人；右邊直接選，左邊按「男生選了 $k$ 人」分類。
+論文命題 3.5 用它證明「平移」和「乘法」可以交換。
+\end{prereq}
+
+\begin{prereq}{質數無窮多，與互質}
+對任何整數 $m\ge1$，都有無窮多個質數 $p$ 與 $m$ 互質（事實上所有大於 $m$ 的質數都行）。
+希爾伯特證明用它挑出無窮多個 $r$，使 $r+1$ 與 $a_0\cdot n!$ 互質。
+\end{prereq}
